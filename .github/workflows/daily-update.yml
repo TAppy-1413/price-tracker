@@ -1,9 +1,9 @@
-name: Daily Price Update
+name: Weekly Price Update
 
 on:
-  # 毎日 00:00 UTC = 09:00 JST
+  # 毎週金曜 00:00 UTC = 金曜 09:00 JST
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 0 * * 5'
   # 手動実行も可能
   workflow_dispatch:
 
@@ -38,6 +38,6 @@ jobs:
           if git diff --staged --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "chore: daily data update $(date -u +%Y-%m-%d)"
+            git commit -m "chore: weekly data update $(date -u +%Y-%m-%d)"
             git push
           fi

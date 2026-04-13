@@ -530,9 +530,32 @@ async function refreshData() {
 }
 
 // -------------------------------------------------------------
+// Real-time clock (JST)
+// -------------------------------------------------------------
+function startClock() {
+  const el = document.getElementById('clock');
+  function tick() {
+    const now = new Date();
+    const jst = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Tokyo' }));
+    const hh = String(jst.getHours()).padStart(2, '0');
+    const mm = String(jst.getMinutes()).padStart(2, '0');
+    const ss = String(jst.getSeconds()).padStart(2, '0');
+    const y = jst.getFullYear();
+    const mo = String(jst.getMonth() + 1).padStart(2, '0');
+    const dd = String(jst.getDate()).padStart(2, '0');
+    const days = ['日', '月', '火', '水', '木', '金', '土'];
+    const day = days[jst.getDay()];
+    el.innerHTML = `${hh}:${mm}:${ss}<span class="clock-date">${y}/${mo}/${dd} (${day})</span>`;
+  }
+  tick();
+  setInterval(tick, 1000);
+}
+
+// -------------------------------------------------------------
 // Init
 // -------------------------------------------------------------
 async function init() {
+  startClock();
   await loadAll();
 
   document.querySelectorAll('.tab-btn').forEach(b => b.addEventListener('click', () => switchTab(b.dataset.tab)));
