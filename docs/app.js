@@ -135,11 +135,18 @@ function buildLineChart(canvasId, rows, keys, dateKey = 'date') {
   if (STATE.charts[canvasId]) STATE.charts[canvasId].destroy();
 
   const filtered = filterRange(rows, dateKey);
+  const isYearOnly = dateKey === 'year';
+
+  // Build labels array (shared X axis)
+  const labels = filtered.map(r => {
+    if (isYearOnly) return String(r[dateKey]);
+    // Ensure proper Date object for time scale
+    return new Date(r[dateKey] + 'T00:00:00');
+  });
 
   const datasets = keys.map(k => {
     let data;
     if (STATE.mode === 'index') {
-      // Index from base = first row of *full* dataset (2000-01) not filtered
       const full = toIndex(rows, k);
       const filterStart = rows.length - filtered.length;
       data = full.slice(filterStart);
@@ -148,38 +155,69 @@ function buildLineChart(canvasId, rows, keys, dateKey = 'date') {
     }
     return {
       label: LABELS[k] || k,
-      data: data.map((v, i) => ({
-        x: filtered[i][dateKey],
-        y: v,
-      })),
+      data,
       borderColor: COLORS[k] || '#999',
       backgroundColor: COLORS[k] || '#999',
       borderWidth: 2,
       pointRadius: 0,
       pointHoverRadius: 4,
-      tension: 0.1,
+      tension: 0.3,
       spanGaps: true,
     };
   });
 
-  const isYearOnly = dateKey === 'year';
+  // Determine appropriate time unit based on range
+  let timeUnit = 'year';
+  if (STATE.range === '1y') timeUnit = 'month';
+  else if (STATE.range === '3y') timeUnit = 'quarter';
+
+  const xScale = isYearOnly ? {
+    type: 'category',
+    ticks: {
+      callback: function(value, index) {
+        const label = this.getLabelForValue(value);
+        return label + '年';
+      },
+      maxTicksLimit: 15,
+      autoSkip: true,
+    },
+    grid: { display: false },
+  } : {
+    type: 'time',
+    time: {
+      unit: timeUnit,
+      displayFormats: {
+        month: 'yyyy/MM',
+        quarter: 'yyyy/MM',
+        year: 'yyyy',
+      },
+      tooltipFormat: 'yyyy年MM月',
+    },
+    ticks: {
+      maxTicksLimit: 15,
+      autoSkip: true,
+      font: { size: 11 },
+    },
+    grid: { display: false },
+  };
 
   STATE.charts[canvasId] = new Chart(ctx, {
     type: 'line',
-    data: { datasets },
+    data: { labels, datasets },
     options: {
       responsive: true,
       maintainAspectRatio: false,
       interaction: { mode: 'index', intersect: false },
       plugins: {
-        legend: { position: 'top', labels: { font: { size: 12 } } },
+        legend: {
+          position: 'top',
+          labels: { font: { size: 12 }, usePointStyle: true, pointStyle: 'line' },
+        },
         tooltip: {
           callbacks: {
             title: items => {
-              const v = items[0].parsed.x;
-              if (isYearOnly) return `${v}年`;
-              const d = new Date(v);
-              return `${d.getFullYear()}年${d.getMonth()+1}月`;
+              if (isYearOnly) return items[0].label + '年';
+              return items[0].label; // uses tooltipFormat
             },
             label: item => {
               const k = keys[item.datasetIndex];
@@ -194,19 +232,15 @@ function buildLineChart(canvasId, rows, keys, dateKey = 'date') {
         },
       },
       scales: {
-        x: isYearOnly ? {
-          type: 'linear',
-          ticks: { callback: v => v + '年' },
-        } : {
-          type: 'time',
-          time: { unit: STATE.range === '1y' ? 'month' : 'year' },
-        },
+        x: xScale,
         y: {
           beginAtZero: STATE.mode === 'index',
           title: {
             display: true,
             text: STATE.mode === 'index' ? '2000年=100 指数' : '',
           },
+          grid: { color: 'rgba(0,0,0,0.06)' },
+          ticks: { font: { size: 11 } },
         },
       },
     },
