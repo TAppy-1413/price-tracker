@@ -53,8 +53,8 @@
   <!-- MATERIALS TAB -->
   <section class="tab-panel active" id="tab-materials">
     <h2>材料価格 (円/kg)</h2>
-    <p class="note">SS400・SUS303・A5052 等の材料価格は、World Bank 国際商品価格 (アルミ・ニッケル・鉄鉱石) と USD/JPY 為替レートから
-    材料組成比に基づいて推定した参考値です。実勢価格とは乖離する場合があります。</p>
+    <p class="note">出典: 日本銀行 企業物価指数 (CGPI) 2020年基準。国内メーカー出荷価格に基づく公式統計指数を、
+    2020年基準価格 (円/kg) で実価格に換算した推定値です。</p>
     <div class="chart-wrap">
       <canvas id="chart-materials"></canvas>
     </div>
@@ -87,9 +87,9 @@
 
   <!-- FREIGHT TAB -->
   <section class="tab-panel" id="tab-freight">
-    <h2>トラック運賃指数</h2>
-    <p class="note">出典: 日本銀行 企業向けサービス価格指数 (SPPI) - 道路貨物輸送。2020年=100。
-    国内で最も信頼性の高い運賃時系列指標。</p>
+    <h2>運賃・輸送コスト指数 (2020=100)</h2>
+    <p class="note">出典: 日本銀行 企業向けサービス価格指数 (SPPI)。2020年=100。
+    トラック運賃、外航船便、国際航空便、内航船便の4系列を表示。</p>
     <div class="chart-wrap">
       <canvas id="chart-freight"></canvas>
     </div>

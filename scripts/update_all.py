@@ -9,6 +9,7 @@ from datetime import datetime
 
 SCRIPTS = [
     'fetch_metals.py',
+    'fetch_materials.py',
     'fetch_sppi.py',
     'fetch_diesel.py',
     'fetch_minwage.py',

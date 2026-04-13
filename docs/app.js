@@ -34,6 +34,9 @@ const COLORS = {
   nationwide:        '#777777',
   sppi_total:        '#2c5aa0',
   road_freight:      '#c8102e',
+  ocean_freight:     '#1a6b3c',
+  air_freight:       '#8e24aa',
+  coastal_freight:   '#f57c00',
   tepco:             '#ff6600',
   chubu:             '#2c5aa0',
   kansai:            '#c8102e',
@@ -46,7 +49,8 @@ const LABELS = {
   tochigi: '栃木', gunma: '群馬', ibaraki: '茨城',
   saitama: '埼玉', tokyo: '東京', aichi: '愛知',
   osaka: '大阪', nationwide: '全国加重平均',
-  sppi_total: 'SPPI総平均', road_freight: '道路貨物輸送',
+  sppi_total: 'SPPI総平均', road_freight: 'トラック運賃',
+  ocean_freight: '外航船便', air_freight: '国際航空便', coastal_freight: '内航船便',
   tepco: '東電管内', chubu: '中部電力', kansai: '関西電力', national: '全国平均',
 };
 
@@ -57,6 +61,7 @@ const UNITS = {
   saitama: '円/時', tokyo: '円/時', aichi: '円/時',
   osaka: '円/時', nationwide: '円/時',
   sppi_total: '指数(2020=100)', road_freight: '指数(2020=100)',
+  ocean_freight: '指数(2020=100)', air_freight: '指数(2020=100)', coastal_freight: '指数(2020=100)',
   tepco: '円/kWh', chubu: '円/kWh', kansai: '円/kWh', national: '円/kWh',
 };
 
@@ -92,31 +97,15 @@ async function loadManifest() {
   } catch { return null; }
 }
 
-// Derive material prices from base metals
-function deriveMaterials(metals) {
-  return metals.map(r => {
-    const usd_jpy = r.usd_jpy || 110;
-    const iron_jpy = r.iron_ore * usd_jpy / 1000;
-    return {
-      ...r,
-      ss400:             Math.round((iron_jpy * 4.8 + 31) * 100) / 100,
-      aluminum_casting:  Math.round(r.aluminum * 1.3 * 100) / 100,
-      iron_casting:      Math.round((iron_jpy * 5.5 + 25) * 100) / 100,
-      sus303:            Math.round((r.nickel * 0.10 + iron_jpy * 0.72 + 250) * 100) / 100,
-      a5052:             Math.round(r.aluminum * 1.15 * 100) / 100,
-    };
-  });
-}
-
 async function loadAll() {
-  const [metalsRaw, sppi, wage, electricity, manifest] = await Promise.all([
-    loadCSV('data/metals.csv'),
+  const [materials, sppi, wage, electricity, manifest] = await Promise.all([
+    loadCSV('data/materials.csv'),
     loadCSV('data/sppi.csv'),
     loadCSV('data/min_wage.csv'),
     loadCSV('data/electricity.csv').catch(() => []),
     loadManifest(),
   ]);
-  STATE.metals = deriveMaterials(metalsRaw);
+  STATE.metals = materials;  // materials.csv (日銀CGPI)
   STATE.sppi = sppi;
   STATE.wage = wage;
   STATE.electricity = electricity;
@@ -307,8 +296,8 @@ function renderElectricity() {
 }
 
 function renderFreight() {
-  buildLineChart('chart-freight', STATE.sppi, ['sppi_total', 'road_freight']);
-  renderCards('freight-cards', STATE.sppi, ['sppi_total', 'road_freight']);
+  buildLineChart('chart-freight', STATE.sppi, ['road_freight', 'ocean_freight', 'air_freight', 'coastal_freight']);
+  renderCards('freight-cards', STATE.sppi, ['road_freight', 'ocean_freight', 'air_freight', 'coastal_freight']);
 }
 
 function renderSummary() {
@@ -323,7 +312,9 @@ function renderSummary() {
     { key: 'sus303', src: STATE.metals, category: '材料' },
     { key: 'a5052', src: STATE.metals, category: '材料' },
     { key: 'road_freight', src: STATE.sppi, category: '運賃' },
-    { key: 'sppi_total', src: STATE.sppi, category: '運賃' },
+    { key: 'ocean_freight', src: STATE.sppi, category: '運賃' },
+    { key: 'air_freight', src: STATE.sppi, category: '運賃' },
+    { key: 'coastal_freight', src: STATE.sppi, category: '運賃' },
     { key: 'tepco', src: STATE.electricity, category: '電気代', dateKey: 'year' },
     { key: 'national', src: STATE.electricity, category: '電気代', dateKey: 'year' },
     { key: 'tochigi', src: STATE.wage, category: '最低賃金', dateKey: 'year' },
