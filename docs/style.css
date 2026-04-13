@@ -130,13 +130,42 @@ header {
   font-weight: 600;
 }
 
-#range-select {
+#range-start, #range-end {
   padding: 8px 12px;
   font-size: 13px;
   border: 1px solid var(--border);
   border-radius: 6px;
   background: white;
   font-family: inherit;
+}
+
+.range-sep {
+  font-size: 14px;
+  color: var(--ink-2);
+  margin: 0 4px;
+}
+
+.preset-btn {
+  padding: 6px 14px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  cursor: pointer;
+  font-family: inherit;
+  color: var(--ink-2);
+  transition: all 0.15s;
+}
+
+.preset-btn:hover {
+  background: var(--border);
+}
+
+.preset-btn.active {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+  font-weight: 600;
 }
 
 main {

@@ -38,13 +38,16 @@
   </div>
   <div class="control-group">
     <label>期間:</label>
-    <select id="range-select">
-      <option value="all" selected>2000年〜現在</option>
-      <option value="10y">直近10年</option>
-      <option value="5y">直近5年</option>
-      <option value="3y">直近3年</option>
-      <option value="1y">直近1年</option>
-    </select>
+    <input type="month" id="range-start" value="2000-01" min="2000-01">
+    <span class="range-sep">〜</span>
+    <input type="month" id="range-end" min="2000-01">
+  </div>
+  <div class="control-group">
+    <button class="preset-btn" data-preset="all">全期間</button>
+    <button class="preset-btn" data-preset="10y">10年</button>
+    <button class="preset-btn" data-preset="5y">5年</button>
+    <button class="preset-btn" data-preset="3y">3年</button>
+    <button class="preset-btn" data-preset="1y">1年</button>
   </div>
 </section>
 

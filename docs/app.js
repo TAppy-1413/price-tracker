@@ -4,7 +4,8 @@
 
 const STATE = {
   mode: 'price',     // 'price' | 'index'
-  range: 'all',      // 'all' | '10y' | '5y' | '3y' | '1y'
+  rangeStart: '2000-01',
+  rangeEnd: null,     // null = current month
   metals: null,
   sppi: null,
   wage: null,
@@ -78,8 +79,13 @@ async function loadCSV(url) {
     const vals = line.split(',');
     const obj = {};
     headers.forEach((h, i) => {
-      const v = vals[i];
-      obj[h] = isNaN(parseFloat(v)) ? v : parseFloat(v);
+      const v = (vals[i] || '').trim();
+      // Keep date/year columns as strings (don't convert "2000-01-01" to 2000)
+      if (h === 'date' || h === 'year') {
+        obj[h] = v;
+      } else {
+        obj[h] = v === '' ? NaN : isNaN(parseFloat(v)) ? v : parseFloat(v);
+      }
     });
     return obj;
   });
@@ -119,12 +125,26 @@ function toIndex(rows, key, baseIdx = 0) {
 }
 
 function filterRange(rows, dateKey = 'date') {
-  if (STATE.range === 'all') return rows;
-  const yearsMap = { '10y': 10, '5y': 5, '3y': 3, '1y': 1 };
-  const years = yearsMap[STATE.range];
-  const cutoff = new Date();
-  cutoff.setFullYear(cutoff.getFullYear() - years);
-  return rows.filter(r => new Date(r[dateKey]) >= cutoff);
+  const startStr = STATE.rangeStart || '2000-01';
+  const endStr = STATE.rangeEnd || getCurrentMonth();
+
+  if (dateKey === 'year') {
+    const startYear = parseInt(startStr.substring(0, 4));
+    const endYear = parseInt(endStr.substring(0, 4));
+    return rows.filter(r => parseInt(r.year) >= startYear && parseInt(r.year) <= endYear);
+  }
+
+  const startDate = new Date(startStr + '-01');
+  const endDate = new Date(endStr + '-28'); // end of month approx
+  return rows.filter(r => {
+    const d = new Date(r[dateKey]);
+    return d >= startDate && d <= endDate;
+  });
+}
+
+function getCurrentMonth() {
+  const now = new Date();
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
 }
 
 // -------------------------------------------------------------
@@ -166,10 +186,11 @@ function buildLineChart(canvasId, rows, keys, dateKey = 'date') {
     };
   });
 
-  // Determine appropriate time unit based on range
+  // Determine appropriate time unit based on date span
+  const spanMonths = filtered.length;
   let timeUnit = 'year';
-  if (STATE.range === '1y') timeUnit = 'month';
-  else if (STATE.range === '3y') timeUnit = 'quarter';
+  if (spanMonths <= 18) timeUnit = 'month';
+  else if (spanMonths <= 48) timeUnit = 'quarter';
 
   const xScale = isYearOnly ? {
     type: 'category',
@@ -401,6 +422,10 @@ function switchTab(name) {
   renderActiveTab();
 }
 
+function clearPresetButtons() {
+  document.querySelectorAll('.preset-btn').forEach(x => x.classList.remove('active'));
+}
+
 function getActiveTab() {
   return document.querySelector('.tab-btn.active').dataset.tab;
 }
@@ -431,10 +456,50 @@ async function init() {
       renderActiveTab();
     });
   });
-  document.getElementById('range-select').addEventListener('change', (e) => {
-    STATE.range = e.target.value;
+
+  // Initialize range-end to current month
+  const rangeEnd = document.getElementById('range-end');
+  const rangeStart = document.getElementById('range-start');
+  rangeEnd.value = getCurrentMonth();
+  rangeEnd.max = getCurrentMonth();
+  rangeStart.max = getCurrentMonth();
+  STATE.rangeEnd = rangeEnd.value;
+
+  rangeStart.addEventListener('change', (e) => {
+    STATE.rangeStart = e.target.value;
+    clearPresetButtons();
     renderActiveTab();
   });
+  rangeEnd.addEventListener('change', (e) => {
+    STATE.rangeEnd = e.target.value;
+    clearPresetButtons();
+    renderActiveTab();
+  });
+
+  // Preset buttons
+  document.querySelectorAll('.preset-btn').forEach(b => {
+    b.addEventListener('click', () => {
+      const preset = b.dataset.preset;
+      if (preset === 'all') {
+        rangeStart.value = '2000-01';
+        rangeEnd.value = getCurrentMonth();
+      } else {
+        const years = parseInt(preset);
+        const now = new Date();
+        const start = new Date(now);
+        start.setFullYear(start.getFullYear() - years);
+        rangeStart.value = `${start.getFullYear()}-${String(start.getMonth() + 1).padStart(2, '0')}`;
+        rangeEnd.value = getCurrentMonth();
+      }
+      STATE.rangeStart = rangeStart.value;
+      STATE.rangeEnd = rangeEnd.value;
+      document.querySelectorAll('.preset-btn').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      renderActiveTab();
+    });
+  });
+  // Mark "all" as active initially
+  document.querySelector('.preset-btn[data-preset="all"]').classList.add('active');
 
   renderMetals();
 }
