@@ -1,5 +1,5 @@
 // =============================================================
-// IKS 価格高騰トラッカー - ダッシュボードロジック
+// IKS コストトレンドモニター - ダッシュボードロジック
 // =============================================================
 
 const STATE = {
@@ -15,6 +15,7 @@ const STATE = {
     wage: new Set(['tochigi', 'gunma', 'ibaraki', 'tokyo', 'nationwide']),
   },
   summaryBaseYear: '2000',
+  summaryCompareYear: '',  // empty = latest
 };
 
 const COLORS = {
@@ -23,13 +24,6 @@ const COLORS = {
   iron_casting:      '#8b3a2e',
   sus303:            '#2c8a7a',
   a5052:             '#c8702e',
-  aluminum:          '#999',
-  copper:            '#b87333',
-  nickel:            '#3a7a6c',
-  lead:              '#55607c',
-  tin:               '#b7a57a',
-  zinc:              '#8a9c9e',
-  iron_ore:          '#7a3a2e',
   tochigi:           '#c8102e',
   gunma:             '#2c5aa0',
   ibaraki:           '#d4a017',
@@ -49,8 +43,6 @@ const COLORS = {
 const LABELS = {
   ss400: 'SS400', aluminum_casting: 'アルミ鋳物', iron_casting: '鉄鋳物',
   sus303: 'SUS303', a5052: 'A5052',
-  aluminum: 'アルミ(LME)', copper: '銅', nickel: 'ニッケル',
-  lead: '鉛', tin: '錫', zinc: '亜鉛', iron_ore: '鉄鉱石',
   tochigi: '栃木', gunma: '群馬', ibaraki: '茨城',
   saitama: '埼玉', tokyo: '東京', aichi: '愛知',
   osaka: '大阪', nationwide: '全国加重平均',
@@ -61,9 +53,6 @@ const LABELS = {
 const UNITS = {
   ss400: '円/kg', aluminum_casting: '円/kg', iron_casting: '円/kg',
   sus303: '円/kg', a5052: '円/kg',
-  aluminum: '円/kg', copper: '円/kg', nickel: '円/kg',
-  lead: '円/kg', tin: '円/kg', zinc: '円/kg',
-  iron_ore: 'USD/dmtu',
   tochigi: '円/時', gunma: '円/時', ibaraki: '円/時',
   saitama: '円/時', tokyo: '円/時', aichi: '円/時',
   osaka: '円/時', nationwide: '円/時',
@@ -299,11 +288,6 @@ function renderMaterials() {
   renderMaterialFilter();
 }
 
-function renderDifficult() {
-  buildLineChart('chart-difficult', STATE.metals, ['nickel', 'tin', 'zinc']);
-  renderCards('difficult-cards', STATE.metals, ['nickel', 'tin', 'zinc']);
-}
-
 function renderWage() {
   const keys = [...STATE.filters.wage];
   buildLineChart('chart-wage', STATE.wage, keys, 'year');
@@ -325,13 +309,14 @@ function renderFreight() {
 function renderSummary() {
   const container = document.getElementById('summary-table');
   const baseYear = STATE.summaryBaseYear;
+  const compareYear = STATE.summaryCompareYear;
+  const curYear = new Date().getFullYear();
   const items = [
     { key: 'ss400', src: STATE.metals, category: '材料' },
     { key: 'aluminum_casting', src: STATE.metals, category: '材料' },
     { key: 'iron_casting', src: STATE.metals, category: '材料' },
     { key: 'sus303', src: STATE.metals, category: '材料' },
     { key: 'a5052', src: STATE.metals, category: '材料' },
-    { key: 'nickel', src: STATE.metals, category: '難削材指標' },
     { key: 'road_freight', src: STATE.sppi, category: '運賃' },
     { key: 'sppi_total', src: STATE.sppi, category: '運賃' },
     { key: 'tepco', src: STATE.electricity, category: '電気代', dateKey: 'year' },
@@ -341,15 +326,26 @@ function renderSummary() {
     { key: 'nationwide', src: STATE.wage, category: '最低賃金', dateKey: 'year' },
   ];
 
+  // Controls: base year + compare year
   let html = `<div class="summary-controls">
-    <label>比較基準年: </label>
+    <label>比較元: </label>
     <select id="summary-base-year">`;
-  for (let y = 2000; y <= new Date().getFullYear(); y++) {
+  for (let y = 2000; y <= curYear; y++) {
     html += `<option value="${y}" ${String(y) === baseYear ? 'selected' : ''}>${y}年</option>`;
   }
+  html += `</select>
+    <span class="range-sep">→</span>
+    <label>比較先: </label>
+    <select id="summary-compare-year">
+      <option value="" ${compareYear === '' ? 'selected' : ''}>最新</option>`;
+  for (let y = 2000; y <= curYear; y++) {
+    html += `<option value="${y}" ${String(y) === compareYear ? 'selected' : ''}>${y}年</option>`;
+  }
   html += `</select></div>`;
+
+  const compareLabel = compareYear || '最新';
   html += '<table><thead><tr>' +
-    `<th>区分</th><th>項目</th><th>${baseYear}年</th><th>最新</th><th>上昇率</th><th>3年後予測</th><th>単位</th>` +
+    `<th>区分</th><th>項目</th><th>${baseYear}年</th><th>${compareLabel}${compareYear ? '年' : ''}</th><th>変動率</th><th>3年後予測</th><th>単位</th>` +
     '</tr></thead><tbody>';
 
   const fmt = v => v.toLocaleString('ja-JP', { maximumFractionDigits: 1 });
@@ -362,28 +358,35 @@ function renderSummary() {
 
     // Find base year row
     let baseRow;
-    if (dk === 'year') {
-      baseRow = rows.find(r => String(r.year) === baseYear);
-    } else {
-      baseRow = rows.find(r => r.date && r.date.startsWith(baseYear));
-    }
+    if (dk === 'year') baseRow = rows.find(r => String(r.year) === baseYear);
+    else baseRow = rows.find(r => r.date && r.date.startsWith(baseYear));
     if (!baseRow) baseRow = rows[0];
+
+    // Find compare year row
+    let compRow;
+    if (compareYear) {
+      if (dk === 'year') compRow = rows.find(r => String(r.year) === compareYear);
+      else compRow = rows.find(r => r.date && r.date.startsWith(compareYear));
+    }
+    if (!compRow) compRow = rows[rows.length - 1]; // fallback to latest
+
     const baseVal = baseRow[it.key];
-    const last = rows[rows.length - 1][it.key];
-    const pct = ((last - baseVal) / baseVal * 100);
+    const compVal = compRow[it.key];
+    const pct = ((compVal - baseVal) / baseVal * 100);
     const pctClass = pct >= 0 ? 'change-up' : 'change-down';
     const pctStr = (pct >= 0 ? '+' : '') + pct.toFixed(1) + '%';
 
     const fc = forecast(it.src, it.key, dk, 36);
     const fcLast = fc.values.length > 0 ? fc.values[fc.values.length - 1] : null;
     const fcStr = fcLast != null ? fmt(fcLast) : '-';
-    const fcPct = fcLast != null ? ((fcLast - last) / last * 100) : null;
+    const lastActual = rows[rows.length - 1][it.key];
+    const fcPct = fcLast != null ? ((fcLast - lastActual) / lastActual * 100) : null;
     const fcPctStr = fcPct != null ? `(${fcPct >= 0 ? '+' : ''}${fcPct.toFixed(1)}%)` : '';
     const fcClass = fcPct != null ? (fcPct >= 0 ? 'change-up' : 'change-down') : '';
 
     html += `<tr>
       <td>${it.category}</td><td><strong>${LABELS[it.key]}</strong></td>
-      <td class="num">${fmt(baseVal)}</td><td class="num">${fmt(last)}</td>
+      <td class="num">${fmt(baseVal)}</td><td class="num">${fmt(compVal)}</td>
       <td class="num ${pctClass}">${pctStr}</td>
       <td class="num ${fcClass}">${fcStr} ${fcPctStr}</td>
       <td>${UNITS[it.key] || ''}</td></tr>`;
@@ -394,6 +397,10 @@ function renderSummary() {
 
   document.getElementById('summary-base-year').addEventListener('change', e => {
     STATE.summaryBaseYear = e.target.value;
+    renderSummary();
+  });
+  document.getElementById('summary-compare-year').addEventListener('change', e => {
+    STATE.summaryCompareYear = e.target.value;
     renderSummary();
   });
 }
@@ -439,7 +446,7 @@ function renderCards(containerId, rows, keys, dateKey = 'date') {
 // Filter chips
 // -------------------------------------------------------------
 function renderMaterialFilter() {
-  const all = ['ss400', 'aluminum_casting', 'iron_casting', 'sus303', 'a5052', 'aluminum', 'copper', 'nickel', 'iron_ore', 'lead', 'tin', 'zinc'];
+  const all = ['ss400', 'aluminum_casting', 'iron_casting', 'sus303', 'a5052'];
   const c = document.getElementById('materials-filter');
   c.innerHTML = '';
   for (const k of all) {
@@ -498,7 +505,6 @@ function getActiveTab() { return document.querySelector('.tab-btn.active').datas
 function renderActiveTab() {
   const t = getActiveTab();
   if (t === 'materials') renderMaterials();
-  else if (t === 'difficult') renderDifficult();
   else if (t === 'labor') renderWage();
   else if (t === 'electricity') renderElectricity();
   else if (t === 'freight') renderFreight();

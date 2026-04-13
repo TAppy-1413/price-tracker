@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IKS 価格高騰トラッカー</title>
+<title>IKS コストトレンドモニター</title>
 <link rel="stylesheet" href="style.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
@@ -12,8 +12,8 @@
 
 <header>
   <div class="brand">
-    <h1>IKS 価格高騰トラッカー</h1>
-    <p class="subtitle">原材料・人件費・運賃の長期推移 ― 契約見直し・機械チャージ改定の根拠資料</p>
+    <h1>IKS コストトレンドモニター</h1>
+    <p class="subtitle">原材料・人件費・運賃・電力の長期推移 ― 契約見直し・機械チャージ改定の根拠資料</p>
   </div>
   <div class="header-right">
     <button id="refresh-btn" class="refresh-btn">データ更新</button>
@@ -25,7 +25,6 @@
 
 <nav class="tabs">
   <button class="tab-btn active" data-tab="materials">材料</button>
-  <button class="tab-btn" data-tab="difficult">難削材</button>
   <button class="tab-btn" data-tab="labor">人件費・最低賃金</button>
   <button class="tab-btn" data-tab="electricity">電気代</button>
   <button class="tab-btn" data-tab="freight">運賃・燃料</button>
@@ -59,19 +58,6 @@
     </div>
     <div class="legend-filter" id="materials-filter"></div>
     <div class="summary-cards" id="materials-cards"></div>
-  </section>
-
-  <!-- DIFFICULT MATERIALS TAB -->
-  <section class="tab-panel" id="tab-difficult">
-    <h2>難削材 代理指標</h2>
-    <p class="note">インコネル・ハステロイ・チタン等の難削材は相対取引が中心で公開時系列価格が存在しません。
-    主要構成元素の国際価格を代理指標として表示します。<br>
-    <strong>ニッケル</strong> = インコネル系/ハステロイ系の主成分 (60-80%)<br>
-    <strong>錫・亜鉛</strong> = 高機能合金の参考</p>
-    <div class="chart-wrap">
-      <canvas id="chart-difficult"></canvas>
-    </div>
-    <div class="summary-cards" id="difficult-cards"></div>
   </section>
 
   <!-- LABOR TAB -->
@@ -117,7 +103,7 @@
 </main>
 
 <footer>
-  <p>IKS 経営企画部 / データソース: World Bank, 日本銀行, 厚生労働省, 資源エネルギー庁, Yahoo Finance<br>
+  <p>IKS 経営企画部 / IKS コストトレンドモニター / データソース: World Bank, 日本銀行, 厚生労働省, 資源エネルギー庁, Yahoo Finance<br>
   すべて公開データに基づきます。材料価格は国際商品価格からの推定参考値。為替は月末値。<br>
   <span style="color:#999">予測線（破線）は直近5年間の線形回帰に基づく統計的トレンド推定です。将来の価格を保証するものではありません。</span></p>
 </footer>
