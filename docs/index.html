@@ -30,13 +30,6 @@
 
 <section class="controls">
   <div class="control-group">
-    <label>表示モード:</label>
-    <div class="toggle">
-      <button class="mode-btn active" data-mode="price">実価格</button>
-      <button class="mode-btn" data-mode="index">2000年=100 指数</button>
-    </div>
-  </div>
-  <div class="control-group">
     <label>期間:</label>
     <input type="month" id="range-start" value="2000-01" min="2000-01">
     <span class="range-sep">〜</span>
@@ -111,7 +104,8 @@
 
 <footer>
   <p>IKS 経営企画部 / データソース: World Bank, 日本銀行, 厚生労働省, Yahoo Finance<br>
-  すべて公開データに基づきます。為替は月末値。</p>
+  すべて公開データに基づきます。為替は月末値。<br>
+  <span style="color:#999">予測線（破線）は直近5年間の線形回帰に基づく統計的トレンド推定です。将来の価格を保証するものではありません。</span></p>
 </footer>
 
 <script src="app.js"></script>
