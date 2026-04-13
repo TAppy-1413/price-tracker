@@ -122,8 +122,13 @@ async function loadAll() {
   STATE.electricity = electricity;
   if (manifest) {
     document.getElementById('last-updated').textContent =
-      `最終更新: ${manifest.generated_at}`;
+      `データ生成: ${manifest.generated_at}`;
   }
+  // ブラウザ取得時刻を表示
+  const now = new Date();
+  const jst = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Tokyo' }));
+  const ts = `${jst.getFullYear()}-${String(jst.getMonth()+1).padStart(2,'0')}-${String(jst.getDate()).padStart(2,'0')} ${String(jst.getHours()).padStart(2,'0')}:${String(jst.getMinutes()).padStart(2,'0')}`;
+  document.getElementById('last-fetched').textContent = `最終取得: ${ts}`;
 }
 
 // -------------------------------------------------------------
