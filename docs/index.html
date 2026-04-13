@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IKS 価格高騰トラッカー</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <h1>IKS 価格高騰トラッカー</h1>
+    <p class="subtitle">原材料・人件費・運賃の長期推移 ― 契約見直し・機械チャージ改定の根拠資料</p>
+  </div>
+  <div class="meta">
+    <span id="last-updated">最終更新: 取得中...</span>
+  </div>
+</header>
+
+<nav class="tabs">
+  <button class="tab-btn active" data-tab="metals">金属</button>
+  <button class="tab-btn" data-tab="difficult">難削材</button>
+  <button class="tab-btn" data-tab="labor">人件費・最低賃金</button>
+  <button class="tab-btn" data-tab="freight">運賃・燃料</button>
+  <button class="tab-btn" data-tab="summary">サマリー</button>
+</nav>
+
+<section class="controls">
+  <div class="control-group">
+    <label>表示モード:</label>
+    <div class="toggle">
+      <button class="mode-btn active" data-mode="price">実価格</button>
+      <button class="mode-btn" data-mode="index">2000年=100 指数</button>
+    </div>
+  </div>
+  <div class="control-group">
+    <label>期間:</label>
+    <select id="range-select">
+      <option value="all" selected>2000年〜現在</option>
+      <option value="10y">直近10年</option>
+      <option value="5y">直近5年</option>
+      <option value="3y">直近3年</option>
+      <option value="1y">直近1年</option>
+    </select>
+  </div>
+</section>
+
+<main>
+  <!-- METALS TAB -->
+  <section class="tab-panel active" id="tab-metals">
+    <h2>金属価格 (円/kg 換算)</h2>
+    <p class="note">出典: World Bank Commodity Markets (Pink Sheet) 月次公表 / USD建て価格を Yahoo Finance の月末 USD/JPY で円換算。
+    2000年1月を100とした指数表示では、各系列の相対的な上昇率を比較できます。</p>
+    <div class="chart-wrap">
+      <canvas id="chart-metals"></canvas>
+    </div>
+    <div class="legend-filter" id="metals-filter"></div>
+    <div class="summary-cards" id="metals-cards"></div>
+  </section>
+
+  <!-- DIFFICULT MATERIALS TAB -->
+  <section class="tab-panel" id="tab-difficult">
+    <h2>難削材 代理指標</h2>
+    <p class="note">インコネル・ハステロイ・チタン等の難削材は相対取引が中心で公開時系列価格が存在しません。
+    主要構成元素の国際価格を代理指標として表示します。<br>
+    <strong>ニッケル</strong> = インコネル系/ハステロイ系の主成分 (60-80%) <br>
+    <strong>錫・亜鉛</strong> = 高機能合金の参考 <br>
+    今後 USGS から チタン・モリブデン・コバルト を追加予定</p>
+    <div class="chart-wrap">
+      <canvas id="chart-difficult"></canvas>
+    </div>
+    <div class="summary-cards" id="difficult-cards"></div>
+  </section>
+
+  <!-- LABOR TAB -->
+  <section class="tab-panel" id="tab-labor">
+    <h2>地域別最低賃金 (円/時)</h2>
+    <p class="note">出典: 厚生労働省 地域別最低賃金の全国一覧 (毎年10月改定)。
+    栃木 (本社) と近隣県 + 全国加重平均を表示。</p>
+    <div class="chart-wrap">
+      <canvas id="chart-wage"></canvas>
+    </div>
+    <div class="legend-filter" id="wage-filter"></div>
+    <div class="summary-cards" id="wage-cards"></div>
+  </section>
+
+  <!-- FREIGHT TAB -->
+  <section class="tab-panel" id="tab-freight">
+    <h2>トラック運賃指数</h2>
+    <p class="note">出典: 日本銀行 企業向けサービス価格指数 (SPPI) - 道路貨物輸送。2020年=100。
+    国内で最も信頼性の高い運賃時系列指標。軽油価格は資源エネ庁から追加予定。</p>
+    <div class="chart-wrap">
+      <canvas id="chart-freight"></canvas>
+    </div>
+    <div class="summary-cards" id="freight-cards"></div>
+  </section>
+
+  <!-- SUMMARY TAB -->
+  <section class="tab-panel" id="tab-summary">
+    <h2>価格高騰サマリー</h2>
+    <p class="note">主要項目の 2000年1月 → 最新月 の上昇率を一覧表示。契約見直し時の根拠資料に。</p>
+    <div id="summary-table"></div>
+  </section>
+</main>
+
+<footer>
+  <p>IKS 経営企画部 / データソース: World Bank, 日本銀行, 厚生労働省, Yahoo Finance<br>
+  すべて公開データに基づきます。為替は月末値。</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
