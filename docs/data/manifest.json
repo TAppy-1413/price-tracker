@@ -1,9 +1,13 @@
 {
-  "generated_at": "2026-04-13 15:08 JST",
+  "generated_at": "2026-04-13 16:15 JST",
   "sources": {
     "diesel": {
       "rows": 0,
       "latest": "n/a"
+    },
+    "electricity": {
+      "rows": 26,
+      "latest": "2025"
     },
     "metals": {
       "rows": 312,

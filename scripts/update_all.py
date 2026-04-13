@@ -12,6 +12,7 @@ SCRIPTS = [
     'fetch_sppi.py',
     'fetch_diesel.py',
     'fetch_minwage.py',
+    'fetch_electricity.py',
 ]
 
 SCRIPT_DIR = Path(__file__).parent

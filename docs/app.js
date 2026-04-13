@@ -8,43 +8,59 @@ const STATE = {
   metals: null,
   sppi: null,
   wage: null,
+  electricity: null,
   charts: {},
   filters: {
-    metals: new Set(['aluminum', 'copper', 'nickel', 'iron_ore']),
+    materials: new Set(['ss400', 'aluminum_casting', 'iron_casting', 'sus303', 'a5052']),
     wage: new Set(['tochigi', 'gunma', 'ibaraki', 'tokyo', 'nationwide']),
   },
+  summaryBaseYear: '2000',
 };
 
 const COLORS = {
-  aluminum:   '#6c7a89',
-  copper:     '#c8702e',
-  nickel:     '#2c8a7a',
-  lead:       '#55607c',
-  tin:        '#b7a57a',
-  zinc:       '#8a9c9e',
-  iron_ore:   '#8b3a2e',
-  tochigi:    '#c8102e',
-  gunma:      '#2c5aa0',
-  ibaraki:    '#d4a017',
-  saitama:    '#5a7d2a',
-  tokyo:      '#1a1a1a',
-  aichi:      '#8e24aa',
-  osaka:      '#f57c00',
-  nationwide: '#777777',
-  sppi_total: '#2c5aa0',
-  road_freight: '#c8102e',
+  ss400:             '#2c5aa0',
+  aluminum_casting:  '#6c7a89',
+  iron_casting:      '#8b3a2e',
+  sus303:            '#2c8a7a',
+  a5052:             '#c8702e',
+  aluminum:          '#999',
+  copper:            '#b87333',
+  nickel:            '#3a7a6c',
+  lead:              '#55607c',
+  tin:               '#b7a57a',
+  zinc:              '#8a9c9e',
+  iron_ore:          '#7a3a2e',
+  tochigi:           '#c8102e',
+  gunma:             '#2c5aa0',
+  ibaraki:           '#d4a017',
+  saitama:           '#5a7d2a',
+  tokyo:             '#1a1a1a',
+  aichi:             '#8e24aa',
+  osaka:             '#f57c00',
+  nationwide:        '#777777',
+  sppi_total:        '#2c5aa0',
+  road_freight:      '#c8102e',
+  tepco:             '#ff6600',
+  chubu:             '#2c5aa0',
+  kansai:            '#c8102e',
+  national:          '#333333',
 };
 
 const LABELS = {
-  aluminum: 'アルミ', copper: '銅', nickel: 'ニッケル',
+  ss400: 'SS400', aluminum_casting: 'アルミ鋳物', iron_casting: '鉄鋳物',
+  sus303: 'SUS303', a5052: 'A5052',
+  aluminum: 'アルミ(LME)', copper: '銅', nickel: 'ニッケル',
   lead: '鉛', tin: '錫', zinc: '亜鉛', iron_ore: '鉄鉱石',
   tochigi: '栃木', gunma: '群馬', ibaraki: '茨城',
   saitama: '埼玉', tokyo: '東京', aichi: '愛知',
   osaka: '大阪', nationwide: '全国加重平均',
   sppi_total: 'SPPI総平均', road_freight: '道路貨物輸送',
+  tepco: '東電管内', chubu: '中部電力', kansai: '関西電力', national: '全国平均',
 };
 
 const UNITS = {
+  ss400: '円/kg', aluminum_casting: '円/kg', iron_casting: '円/kg',
+  sus303: '円/kg', a5052: '円/kg',
   aluminum: '円/kg', copper: '円/kg', nickel: '円/kg',
   lead: '円/kg', tin: '円/kg', zinc: '円/kg',
   iron_ore: 'USD/dmtu',
@@ -52,13 +68,14 @@ const UNITS = {
   saitama: '円/時', tokyo: '円/時', aichi: '円/時',
   osaka: '円/時', nationwide: '円/時',
   sppi_total: '指数(2020=100)', road_freight: '指数(2020=100)',
+  tepco: '円/kWh', chubu: '円/kWh', kansai: '円/kWh', national: '円/kWh',
 };
 
 // -------------------------------------------------------------
 // Data loading
 // -------------------------------------------------------------
 async function loadCSV(url) {
-  const r = await fetch(url);
+  const r = await fetch(url + '?t=' + Date.now());
   if (!r.ok) throw new Error(`Failed to load ${url}`);
   const text = await r.text();
   const lines = text.trim().split('\n');
@@ -80,22 +97,40 @@ async function loadCSV(url) {
 
 async function loadManifest() {
   try {
-    const r = await fetch('data/manifest.json');
+    const r = await fetch('data/manifest.json?t=' + Date.now());
     if (!r.ok) return null;
     return await r.json();
   } catch { return null; }
 }
 
+// Derive material prices from base metals
+function deriveMaterials(metals) {
+  return metals.map(r => {
+    const usd_jpy = r.usd_jpy || 110;
+    const iron_jpy = r.iron_ore * usd_jpy / 1000;
+    return {
+      ...r,
+      ss400:             Math.round((iron_jpy * 4.8 + 31) * 100) / 100,
+      aluminum_casting:  Math.round(r.aluminum * 1.3 * 100) / 100,
+      iron_casting:      Math.round((iron_jpy * 5.5 + 25) * 100) / 100,
+      sus303:            Math.round((r.nickel * 0.10 + iron_jpy * 0.72 + 250) * 100) / 100,
+      a5052:             Math.round(r.aluminum * 1.15 * 100) / 100,
+    };
+  });
+}
+
 async function loadAll() {
-  const [metals, sppi, wage, manifest] = await Promise.all([
+  const [metalsRaw, sppi, wage, electricity, manifest] = await Promise.all([
     loadCSV('data/metals.csv'),
     loadCSV('data/sppi.csv'),
     loadCSV('data/min_wage.csv'),
+    loadCSV('data/electricity.csv').catch(() => []),
     loadManifest(),
   ]);
-  STATE.metals = metals;
+  STATE.metals = deriveMaterials(metalsRaw);
   STATE.sppi = sppi;
   STATE.wage = wage;
+  STATE.electricity = electricity;
   if (manifest) {
     document.getElementById('last-updated').textContent =
       `最終更新: ${manifest.generated_at}`;
@@ -108,19 +143,14 @@ async function loadAll() {
 function filterRange(rows, dateKey = 'date') {
   const startStr = STATE.rangeStart || '2000-01';
   const endStr = STATE.rangeEnd || getCurrentMonth();
-
   if (dateKey === 'year') {
-    const startYear = parseInt(startStr.substring(0, 4));
-    const endYear = parseInt(endStr.substring(0, 4));
-    return rows.filter(r => parseInt(r.year) >= startYear && parseInt(r.year) <= endYear);
+    const sy = parseInt(startStr.substring(0, 4));
+    const ey = parseInt(endStr.substring(0, 4));
+    return rows.filter(r => parseInt(r.year) >= sy && parseInt(r.year) <= ey);
   }
-
-  const startDate = new Date(startStr + '-01');
-  const endDate = new Date(endStr + '-28');
-  return rows.filter(r => {
-    const d = new Date(r[dateKey]);
-    return d >= startDate && d <= endDate;
-  });
+  const sd = new Date(startStr + '-01');
+  const ed = new Date(endStr + '-28');
+  return rows.filter(r => { const d = new Date(r[dateKey]); return d >= sd && d <= ed; });
 }
 
 function getCurrentMonth() {
@@ -129,77 +159,44 @@ function getCurrentMonth() {
 }
 
 // -------------------------------------------------------------
-// 線形回帰 (直近5年のデータを使用)
+// Linear regression (last 5 years)
 // -------------------------------------------------------------
 function linearRegression(values) {
-  // values: array of numbers (NaN/null excluded by caller)
   const n = values.length;
   if (n < 2) return { slope: 0, intercept: values[0] || 0 };
-  let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
-  for (let i = 0; i < n; i++) {
-    sumX += i;
-    sumY += values[i];
-    sumXY += i * values[i];
-    sumXX += i * i;
-  }
-  const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
-  const intercept = (sumY - slope * sumX) / n;
-  return { slope, intercept };
+  let sx = 0, sy = 0, sxy = 0, sxx = 0;
+  for (let i = 0; i < n; i++) { sx += i; sy += values[i]; sxy += i * values[i]; sxx += i * i; }
+  const slope = (n * sxy - sx * sy) / (n * sxx - sx * sx);
+  return { slope, intercept: (sy - slope * sx) / n };
 }
 
-function forecast(rows, key, dateKey, forecastMonths) {
-  // Use last 5 years of data for regression
+function forecast(rows, key, dateKey, months) {
   const valid = rows.filter(r => !isNaN(r[key]) && r[key] !== null);
-  const recentCount = dateKey === 'year' ? 5 : 60; // 5 years or 60 months
-  const recent = valid.slice(-recentCount);
+  const recentN = dateKey === 'year' ? 5 : 60;
+  const recent = valid.slice(-recentN);
   if (recent.length < 3) return { labels: [], values: [] };
-
-  const vals = recent.map(r => r[key]);
-  const reg = linearRegression(vals);
-
-  // R² to assess fit quality
-  const mean = vals.reduce((a, b) => a + b, 0) / vals.length;
-  let ssTot = 0, ssRes = 0;
-  vals.forEach((v, i) => {
-    const predicted = reg.intercept + reg.slope * i;
-    ssTot += (v - mean) ** 2;
-    ssRes += (v - predicted) ** 2;
-  });
-  const r2 = ssTot === 0 ? 0 : 1 - ssRes / ssTot;
-
-  // Generate forecast points
+  const reg = linearRegression(recent.map(r => r[key]));
   const lastIdx = recent.length - 1;
-  const steps = dateKey === 'year' ? 3 : forecastMonths;
-  const labels = [];
-  const values = [];
-
-  // Start from the last actual data point for continuity
+  const steps = dateKey === 'year' ? 3 : months;
+  const labels = [], values = [];
   const lastRow = valid[valid.length - 1];
   if (dateKey === 'year') {
-    const lastYear = parseInt(lastRow.year);
-    // Include last actual point as bridge
-    labels.push(String(lastYear));
-    values.push(lastRow[key]);
+    const ly = parseInt(lastRow.year);
+    labels.push(String(ly)); values.push(lastRow[key]);
     for (let i = 1; i <= steps; i++) {
-      labels.push(String(lastYear + i));
-      const predicted = reg.intercept + reg.slope * (lastIdx + i);
-      values.push(Math.max(0, Math.round(predicted * 10) / 10));
+      labels.push(String(ly + i));
+      values.push(Math.max(0, Math.round((reg.intercept + reg.slope * (lastIdx + i)) * 10) / 10));
     }
   } else {
-    const lastDate = new Date(lastRow.date + 'T00:00:00');
-    // Include last actual point as bridge
-    labels.push(new Date(lastDate));
-    values.push(lastRow[key]);
+    const ld = new Date(lastRow.date + 'T00:00:00');
+    labels.push(new Date(ld)); values.push(lastRow[key]);
     for (let i = 1; i <= steps; i++) {
-      const d = new Date(lastDate);
-      d.setMonth(d.getMonth() + i);
+      const d = new Date(ld); d.setMonth(d.getMonth() + i);
       labels.push(d);
-      const predicted = reg.intercept + reg.slope * (lastIdx + i);
-      values.push(Math.max(0, Math.round(predicted * 100) / 100));
+      values.push(Math.max(0, Math.round((reg.intercept + reg.slope * (lastIdx + i)) * 100) / 100));
     }
   }
-
-  return { labels, values, r2 };
+  return { labels, values };
 }
 
 // -------------------------------------------------------------
@@ -208,185 +205,85 @@ function forecast(rows, key, dateKey, forecastMonths) {
 function buildLineChart(canvasId, rows, keys, dateKey = 'date') {
   const ctx = document.getElementById(canvasId).getContext('2d');
   if (STATE.charts[canvasId]) STATE.charts[canvasId].destroy();
-
   const filtered = filterRange(rows, dateKey);
-  const isYearOnly = dateKey === 'year';
+  const isYear = dateKey === 'year';
+  const labels = filtered.map(r => isYear ? String(r[dateKey]) : new Date(r[dateKey] + 'T00:00:00'));
+  const datasets = keys.map(k => ({
+    label: LABELS[k] || k,
+    data: filtered.map(r => r[k] == null || isNaN(r[k]) ? null : r[k]),
+    borderColor: COLORS[k] || '#999', backgroundColor: COLORS[k] || '#999',
+    borderWidth: 2, pointRadius: 0, pointHoverRadius: 4, tension: 0.3, spanGaps: true,
+  }));
 
-  // Build labels for actual data
-  const labels = filtered.map(r => {
-    if (isYearOnly) return String(r[dateKey]);
-    return new Date(r[dateKey] + 'T00:00:00');
-  });
-
-  // Actual data datasets
-  const datasets = keys.map(k => {
-    const data = filtered.map(r => r[k] == null || isNaN(r[k]) ? null : r[k]);
-    return {
-      label: LABELS[k] || k,
-      data,
-      borderColor: COLORS[k] || '#999',
-      backgroundColor: COLORS[k] || '#999',
-      borderWidth: 2,
-      pointRadius: 0,
-      pointHoverRadius: 4,
-      tension: 0.3,
-      spanGaps: true,
-    };
-  });
-
-  // Forecast datasets (3 years = 36 months)
-  const forecastMonths = 36;
-  const forecastLabels = [];
-
+  // Forecast
+  const fcLabels = [];
   keys.forEach(k => {
-    const fc = forecast(rows, k, dateKey, forecastMonths);
-    if (fc.labels.length === 0) return;
-
-    // Collect forecast labels to extend the chart axis
-    fc.labels.forEach(l => {
-      if (!forecastLabels.find(fl => String(fl) === String(l))) {
-        forecastLabels.push(l);
-      }
-    });
-
-    // Build forecast data array aligned to full label set
-    // We'll set actual-period values to null so only forecast segment shows
-    const forecastData = new Array(labels.length).fill(null);
-
-    // Map forecast labels to their indices in extended label set
-    const fcMap = {};
-    fc.labels.forEach((l, i) => fcMap[String(l)] = fc.values[i]);
-
+    const fc = forecast(rows, k, dateKey, 36);
+    if (!fc.labels.length) return;
+    fc.labels.forEach(l => { if (!fcLabels.find(f => String(f) === String(l))) fcLabels.push(l); });
     datasets.push({
-      label: `${LABELS[k]} 予測`,
-      data: forecastData, // placeholder, will be rebuilt after label merge
-      borderColor: COLORS[k] || '#999',
-      backgroundColor: 'transparent',
-      borderWidth: 2,
-      borderDash: [8, 4],
-      pointRadius: 0,
-      pointHoverRadius: 4,
-      tension: 0.3,
-      spanGaps: true,
-      _forecastMap: fcMap, // temporary, used below
+      label: `${LABELS[k]} 予測`, data: [],
+      borderColor: COLORS[k] || '#999', backgroundColor: 'transparent',
+      borderWidth: 2, borderDash: [8, 4], pointRadius: 0, pointHoverRadius: 4,
+      tension: 0.3, spanGaps: true, _fcMap: Object.fromEntries(fc.labels.map((l, i) => [String(l), fc.values[i]])),
     });
   });
 
-  // Merge forecast labels into main labels
-  const allLabels = [...labels];
-  forecastLabels.forEach(fl => {
-    if (!allLabels.find(l => String(l) === String(fl))) {
-      allLabels.push(fl);
-    }
-  });
+  const all = [...labels];
+  fcLabels.forEach(l => { if (!all.find(a => String(a) === String(l))) all.push(l); });
+  if (isYear) all.sort((a, b) => parseInt(a) - parseInt(b));
+  else all.sort((a, b) => new Date(a) - new Date(b));
 
-  // Sort labels
-  if (isYearOnly) {
-    allLabels.sort((a, b) => parseInt(a) - parseInt(b));
-  } else {
-    allLabels.sort((a, b) => new Date(a) - new Date(b));
-  }
-
-  // Re-align all dataset data to merged labels
   datasets.forEach(ds => {
-    if (ds._forecastMap) {
-      // Forecast dataset
-      ds.data = allLabels.map(l => {
-        const v = ds._forecastMap[String(l)];
-        return v !== undefined ? v : null;
-      });
-      delete ds._forecastMap;
+    if (ds._fcMap) {
+      ds.data = all.map(l => { const v = ds._fcMap[String(l)]; return v !== undefined ? v : null; });
+      delete ds._fcMap;
     } else {
-      // Actual dataset: pad with nulls for forecast period
-      const origData = ds.data;
-      ds.data = allLabels.map((l, i) => {
-        // Find matching index in original labels
-        const origIdx = labels.findIndex(ol => String(ol) === String(l));
-        return origIdx >= 0 ? origData[origIdx] : null;
-      });
+      const orig = ds.data;
+      ds.data = all.map(l => { const i = labels.findIndex(o => String(o) === String(l)); return i >= 0 ? orig[i] : null; });
     }
   });
 
-  // Determine appropriate time unit
-  const spanMonths = allLabels.length;
-  let timeUnit = 'year';
-  if (spanMonths <= 18) timeUnit = 'month';
-  else if (spanMonths <= 48) timeUnit = 'quarter';
-
-  const xScale = isYearOnly ? {
-    type: 'category',
-    ticks: {
-      callback: function(value) {
-        return this.getLabelForValue(value) + '年';
-      },
-      maxTicksLimit: 15,
-      autoSkip: true,
-    },
-    grid: { display: false },
-  } : {
-    type: 'time',
-    time: {
-      unit: timeUnit,
-      displayFormats: {
-        month: 'yyyy/MM',
-        quarter: 'yyyy/MM',
-        year: 'yyyy',
-      },
-      tooltipFormat: 'yyyy年MM月',
-    },
-    ticks: {
-      maxTicksLimit: 15,
-      autoSkip: true,
-      font: { size: 11 },
-    },
-    grid: { display: false },
-  };
+  const span = all.length;
+  let unit = 'year';
+  if (span <= 18) unit = 'month'; else if (span <= 48) unit = 'quarter';
 
   STATE.charts[canvasId] = new Chart(ctx, {
-    type: 'line',
-    data: { labels: allLabels, datasets },
+    type: 'line', data: { labels: all, datasets },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
+      responsive: true, maintainAspectRatio: false,
       interaction: { mode: 'index', intersect: false },
       plugins: {
         legend: {
           position: 'top',
-          labels: {
-            font: { size: 12 },
-            usePointStyle: true,
-            pointStyle: 'line',
-            filter: item => !item.text.includes('予測'),
-          },
+          labels: { font: { size: 12 }, usePointStyle: true, pointStyle: 'line',
+            filter: item => !item.text.includes('予測') },
         },
         tooltip: {
           callbacks: {
-            title: items => {
-              if (isYearOnly) return items[0].label + '年';
-              return items[0].label;
-            },
+            title: items => isYear ? items[0].label + '年' : items[0].label,
             label: item => {
-              const v = item.parsed.y;
-              if (v == null) return null;
-              const dsLabel = item.dataset.label;
-              const isForecast = dsLabel.includes('予測');
-              const fmt = v.toLocaleString('ja-JP', { maximumFractionDigits: 2 });
-              // Find unit from the base key
-              const baseLabel = dsLabel.replace(' 予測', '');
-              const unitKey = Object.entries(LABELS).find(([, l]) => l === baseLabel)?.[0];
-              const unit = UNITS[unitKey] || '';
-              return `${dsLabel}: ${fmt} ${unit}${isForecast ? ' (推定)' : ''}`;
+              const v = item.parsed.y; if (v == null) return null;
+              const lbl = item.dataset.label; const isFc = lbl.includes('予測');
+              const base = lbl.replace(' 予測', '');
+              const uk = Object.entries(LABELS).find(([, l]) => l === base)?.[0];
+              return `${lbl}: ${v.toLocaleString('ja-JP', { maximumFractionDigits: 2 })} ${UNITS[uk] || ''}${isFc ? ' (推定)' : ''}`;
             },
           },
         },
       },
       scales: {
-        x: xScale,
-        y: {
-          beginAtZero: false,
-          grid: { color: 'rgba(0,0,0,0.06)' },
-          ticks: { font: { size: 11 } },
+        x: isYear ? {
+          type: 'category',
+          ticks: { callback: function(v) { return this.getLabelForValue(v) + '年'; }, maxTicksLimit: 15, autoSkip: true },
+          grid: { display: false },
+        } : {
+          type: 'time',
+          time: { unit, displayFormats: { month: 'yyyy/MM', quarter: 'yyyy/MM', year: 'yyyy' }, tooltipFormat: 'yyyy年MM月' },
+          ticks: { maxTicksLimit: 15, autoSkip: true, font: { size: 11 } },
+          grid: { display: false },
         },
+        y: { beginAtZero: false, grid: { color: 'rgba(0,0,0,0.06)' }, ticks: { font: { size: 11 } } },
       },
     },
   });
@@ -395,24 +292,29 @@ function buildLineChart(canvasId, rows, keys, dateKey = 'date') {
 // -------------------------------------------------------------
 // Tab renderers
 // -------------------------------------------------------------
-function renderMetals() {
-  const keys = [...STATE.filters.metals];
-  buildLineChart('chart-metals', STATE.metals, keys);
-  renderCards('metals-cards', STATE.metals, ['aluminum','copper','nickel','iron_ore']);
-  renderMetalFilter();
+function renderMaterials() {
+  const keys = [...STATE.filters.materials];
+  buildLineChart('chart-materials', STATE.metals, keys);
+  renderCards('materials-cards', STATE.metals, ['ss400', 'aluminum_casting', 'iron_casting', 'sus303', 'a5052']);
+  renderMaterialFilter();
 }
 
 function renderDifficult() {
-  const keys = ['nickel', 'tin', 'zinc'];
-  buildLineChart('chart-difficult', STATE.metals, keys);
-  renderCards('difficult-cards', STATE.metals, keys);
+  buildLineChart('chart-difficult', STATE.metals, ['nickel', 'tin', 'zinc']);
+  renderCards('difficult-cards', STATE.metals, ['nickel', 'tin', 'zinc']);
 }
 
 function renderWage() {
   const keys = [...STATE.filters.wage];
   buildLineChart('chart-wage', STATE.wage, keys, 'year');
-  renderCards('wage-cards', STATE.wage, ['tochigi','tokyo','nationwide'], 'year');
+  renderCards('wage-cards', STATE.wage, ['tochigi', 'tokyo', 'nationwide'], 'year');
   renderWageFilter();
+}
+
+function renderElectricity() {
+  if (!STATE.electricity || !STATE.electricity.length) return;
+  buildLineChart('chart-electricity', STATE.electricity, ['tepco', 'chubu', 'kansai', 'national'], 'year');
+  renderCards('electricity-cards', STATE.electricity, ['tepco', 'national'], 'year');
 }
 
 function renderFreight() {
@@ -422,67 +324,90 @@ function renderFreight() {
 
 function renderSummary() {
   const container = document.getElementById('summary-table');
+  const baseYear = STATE.summaryBaseYear;
   const items = [
-    { key: 'aluminum', src: STATE.metals, category: '金属' },
-    { key: 'copper',   src: STATE.metals, category: '金属' },
-    { key: 'nickel',   src: STATE.metals, category: '金属 / 難削材指標' },
-    { key: 'iron_ore', src: STATE.metals, category: '金属' },
-    { key: 'tin',      src: STATE.metals, category: '金属' },
-    { key: 'zinc',     src: STATE.metals, category: '金属' },
+    { key: 'ss400', src: STATE.metals, category: '材料' },
+    { key: 'aluminum_casting', src: STATE.metals, category: '材料' },
+    { key: 'iron_casting', src: STATE.metals, category: '材料' },
+    { key: 'sus303', src: STATE.metals, category: '材料' },
+    { key: 'a5052', src: STATE.metals, category: '材料' },
+    { key: 'nickel', src: STATE.metals, category: '難削材指標' },
     { key: 'road_freight', src: STATE.sppi, category: '運賃' },
-    { key: 'sppi_total',   src: STATE.sppi, category: '運賃' },
-    { key: 'tochigi',  src: STATE.wage, category: '最低賃金', dateKey: 'year' },
-    { key: 'tokyo',    src: STATE.wage, category: '最低賃金', dateKey: 'year' },
+    { key: 'sppi_total', src: STATE.sppi, category: '運賃' },
+    { key: 'tepco', src: STATE.electricity, category: '電気代', dateKey: 'year' },
+    { key: 'national', src: STATE.electricity, category: '電気代', dateKey: 'year' },
+    { key: 'tochigi', src: STATE.wage, category: '最低賃金', dateKey: 'year' },
+    { key: 'tokyo', src: STATE.wage, category: '最低賃金', dateKey: 'year' },
     { key: 'nationwide', src: STATE.wage, category: '最低賃金', dateKey: 'year' },
   ];
 
-  // Add 3-year forecast to summary
-  let html = '<table><thead><tr>' +
-    '<th>区分</th><th>項目</th><th>2000年</th><th>最新</th><th>上昇率</th><th>3年後予測</th><th>単位</th>' +
+  let html = `<div class="summary-controls">
+    <label>比較基準年: </label>
+    <select id="summary-base-year">`;
+  for (let y = 2000; y <= new Date().getFullYear(); y++) {
+    html += `<option value="${y}" ${String(y) === baseYear ? 'selected' : ''}>${y}年</option>`;
+  }
+  html += `</select></div>`;
+  html += '<table><thead><tr>' +
+    `<th>区分</th><th>項目</th><th>${baseYear}年</th><th>最新</th><th>上昇率</th><th>3年後予測</th><th>単位</th>` +
     '</tr></thead><tbody>';
 
+  const fmt = v => v.toLocaleString('ja-JP', { maximumFractionDigits: 1 });
+
   for (const it of items) {
+    if (!it.src || !it.src.length) continue;
+    const dk = it.dateKey || 'date';
     const rows = it.src.filter(r => !isNaN(r[it.key]));
     if (rows.length < 2) continue;
-    const first = rows[0][it.key];
+
+    // Find base year row
+    let baseRow;
+    if (dk === 'year') {
+      baseRow = rows.find(r => String(r.year) === baseYear);
+    } else {
+      baseRow = rows.find(r => r.date && r.date.startsWith(baseYear));
+    }
+    if (!baseRow) baseRow = rows[0];
+    const baseVal = baseRow[it.key];
     const last = rows[rows.length - 1][it.key];
-    const pct = ((last - first) / first * 100);
+    const pct = ((last - baseVal) / baseVal * 100);
     const pctClass = pct >= 0 ? 'change-up' : 'change-down';
     const pctStr = (pct >= 0 ? '+' : '') + pct.toFixed(1) + '%';
-    const fmt = v => v.toLocaleString('ja-JP', { maximumFractionDigits: 1 });
 
-    // Forecast
-    const dk = it.dateKey || 'date';
     const fc = forecast(it.src, it.key, dk, 36);
     const fcLast = fc.values.length > 0 ? fc.values[fc.values.length - 1] : null;
     const fcStr = fcLast != null ? fmt(fcLast) : '-';
     const fcPct = fcLast != null ? ((fcLast - last) / last * 100) : null;
     const fcPctStr = fcPct != null ? `(${fcPct >= 0 ? '+' : ''}${fcPct.toFixed(1)}%)` : '';
-    const fcPctClass = fcPct != null ? (fcPct >= 0 ? 'change-up' : 'change-down') : '';
+    const fcClass = fcPct != null ? (fcPct >= 0 ? 'change-up' : 'change-down') : '';
 
     html += `<tr>
-      <td>${it.category}</td>
-      <td><strong>${LABELS[it.key]}</strong></td>
-      <td class="num">${fmt(first)}</td>
-      <td class="num">${fmt(last)}</td>
+      <td>${it.category}</td><td><strong>${LABELS[it.key]}</strong></td>
+      <td class="num">${fmt(baseVal)}</td><td class="num">${fmt(last)}</td>
       <td class="num ${pctClass}">${pctStr}</td>
-      <td class="num ${fcPctClass}">${fcStr} ${fcPctStr}</td>
-      <td>${UNITS[it.key] || ''}</td>
-    </tr>`;
+      <td class="num ${fcClass}">${fcStr} ${fcPctStr}</td>
+      <td>${UNITS[it.key] || ''}</td></tr>`;
   }
   html += '</tbody></table>';
-  html += '<p style="font-size:11px;color:#999;margin-top:12px">※ 3年後予測は直近5年間のデータに基づく線形回帰推定値です。</p>';
+  html += '<p style="font-size:11px;color:#999;margin-top:12px">※ 材料価格は国際商品価格から推定した参考値です。3年後予測は直近5年の線形回帰に基づく推定値です。</p>';
   container.innerHTML = html;
+
+  document.getElementById('summary-base-year').addEventListener('change', e => {
+    STATE.summaryBaseYear = e.target.value;
+    renderSummary();
+  });
 }
 
 // -------------------------------------------------------------
-// Cards
+// Cards (期間選択の開始時点と比較)
 // -------------------------------------------------------------
 function renderCards(containerId, rows, keys, dateKey = 'date') {
   const c = document.getElementById(containerId);
+  if (!c) return;
   c.innerHTML = '';
+  const filtered = filterRange(rows, dateKey);
   for (const k of keys) {
-    const valid = rows.filter(r => !isNaN(r[k]));
+    const valid = filtered.filter(r => !isNaN(r[k]));
     if (!valid.length) continue;
     const first = valid[0][k];
     const last = valid[valid.length - 1][k];
@@ -491,25 +416,34 @@ function renderCards(containerId, rows, keys, dateKey = 'date') {
     const sign = pct >= 0 ? '+' : '';
     const fmt = v => v.toLocaleString('ja-JP', { maximumFractionDigits: 1 });
     const unit = UNITS[k] || '';
-    const html = `
+
+    // Period label
+    let periodLabel;
+    if (dateKey === 'year') {
+      periodLabel = `${valid[0].year}年比`;
+    } else {
+      const sd = valid[0].date.substring(0, 7);
+      periodLabel = `${sd}比`;
+    }
+
+    c.insertAdjacentHTML('beforeend', `
       <div class="card">
         <div class="card-label">${LABELS[k]}</div>
         <div class="card-value">${fmt(last)} <span style="font-size:12px;font-weight:400;color:var(--ink-2)">${unit}</span></div>
-        <div class="card-change ${cls}">${sign}${pct.toFixed(1)}% (2000年比)</div>
-      </div>`;
-    c.insertAdjacentHTML('beforeend', html);
+        <div class="card-change ${cls}">${sign}${pct.toFixed(1)}% (${periodLabel})</div>
+      </div>`);
   }
 }
 
 // -------------------------------------------------------------
 // Filter chips
 // -------------------------------------------------------------
-function renderMetalFilter() {
-  const all = ['aluminum','copper','nickel','iron_ore','lead','tin','zinc'];
-  const c = document.getElementById('metals-filter');
+function renderMaterialFilter() {
+  const all = ['ss400', 'aluminum_casting', 'iron_casting', 'sus303', 'a5052', 'aluminum', 'copper', 'nickel', 'iron_ore', 'lead', 'tin', 'zinc'];
+  const c = document.getElementById('materials-filter');
   c.innerHTML = '';
   for (const k of all) {
-    const active = STATE.filters.metals.has(k);
+    const active = STATE.filters.materials.has(k);
     const chip = document.createElement('div');
     chip.className = 'chip' + (active ? ' active' : ' muted');
     chip.style.background = active ? COLORS[k] : 'var(--card)';
@@ -517,16 +451,16 @@ function renderMetalFilter() {
     chip.style.color = active ? 'white' : COLORS[k];
     chip.textContent = LABELS[k];
     chip.onclick = () => {
-      if (STATE.filters.metals.has(k)) STATE.filters.metals.delete(k);
-      else STATE.filters.metals.add(k);
-      renderMetals();
+      if (STATE.filters.materials.has(k)) STATE.filters.materials.delete(k);
+      else STATE.filters.materials.add(k);
+      renderMaterials();
     };
     c.appendChild(chip);
   }
 }
 
 function renderWageFilter() {
-  const all = ['tochigi','gunma','ibaraki','saitama','tokyo','aichi','osaka','nationwide'];
+  const all = ['tochigi', 'gunma', 'ibaraki', 'saitama', 'tokyo', 'aichi', 'osaka', 'nationwide'];
   const c = document.getElementById('wage-filter');
   c.innerHTML = '';
   for (const k of all) {
@@ -550,12 +484,8 @@ function renderWageFilter() {
 // Tab switching
 // -------------------------------------------------------------
 function switchTab(name) {
-  document.querySelectorAll('.tab-btn').forEach(b => {
-    b.classList.toggle('active', b.dataset.tab === name);
-  });
-  document.querySelectorAll('.tab-panel').forEach(p => {
-    p.classList.toggle('active', p.id === `tab-${name}`);
-  });
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === `tab-${name}`));
   renderActiveTab();
 }
 
@@ -563,17 +493,34 @@ function clearPresetButtons() {
   document.querySelectorAll('.preset-btn').forEach(x => x.classList.remove('active'));
 }
 
-function getActiveTab() {
-  return document.querySelector('.tab-btn.active').dataset.tab;
-}
+function getActiveTab() { return document.querySelector('.tab-btn.active').dataset.tab; }
 
 function renderActiveTab() {
   const t = getActiveTab();
-  if (t === 'metals') renderMetals();
+  if (t === 'materials') renderMaterials();
   else if (t === 'difficult') renderDifficult();
   else if (t === 'labor') renderWage();
+  else if (t === 'electricity') renderElectricity();
   else if (t === 'freight') renderFreight();
   else if (t === 'summary') renderSummary();
+}
+
+// -------------------------------------------------------------
+// Update button
+// -------------------------------------------------------------
+async function refreshData() {
+  const btn = document.getElementById('refresh-btn');
+  btn.disabled = true;
+  btn.textContent = '更新中...';
+  try {
+    await loadAll();
+    renderActiveTab();
+    btn.textContent = '更新完了';
+    setTimeout(() => { btn.textContent = 'データ更新'; btn.disabled = false; }, 2000);
+  } catch (e) {
+    btn.textContent = '更新失敗';
+    setTimeout(() => { btn.textContent = 'データ更新'; btn.disabled = false; }, 2000);
+  }
 }
 
 // -------------------------------------------------------------
@@ -582,11 +529,9 @@ function renderActiveTab() {
 async function init() {
   await loadAll();
 
-  document.querySelectorAll('.tab-btn').forEach(b => {
-    b.addEventListener('click', () => switchTab(b.dataset.tab));
-  });
+  document.querySelectorAll('.tab-btn').forEach(b => b.addEventListener('click', () => switchTab(b.dataset.tab)));
+  document.getElementById('refresh-btn').addEventListener('click', refreshData);
 
-  // Initialize range pickers
   const rangeEnd = document.getElementById('range-end');
   const rangeStart = document.getElementById('range-start');
   rangeEnd.value = getCurrentMonth();
@@ -594,30 +539,16 @@ async function init() {
   rangeStart.max = getCurrentMonth();
   STATE.rangeEnd = rangeEnd.value;
 
-  rangeStart.addEventListener('change', (e) => {
-    STATE.rangeStart = e.target.value;
-    clearPresetButtons();
-    renderActiveTab();
-  });
-  rangeEnd.addEventListener('change', (e) => {
-    STATE.rangeEnd = e.target.value;
-    clearPresetButtons();
-    renderActiveTab();
-  });
+  rangeStart.addEventListener('change', e => { STATE.rangeStart = e.target.value; clearPresetButtons(); renderActiveTab(); });
+  rangeEnd.addEventListener('change', e => { STATE.rangeEnd = e.target.value; clearPresetButtons(); renderActiveTab(); });
 
-  // Preset buttons
   document.querySelectorAll('.preset-btn').forEach(b => {
     b.addEventListener('click', () => {
-      const preset = b.dataset.preset;
-      if (preset === 'all') {
-        rangeStart.value = '2000-01';
-        rangeEnd.value = getCurrentMonth();
-      } else {
-        const years = parseInt(preset);
-        const now = new Date();
-        const start = new Date(now);
-        start.setFullYear(start.getFullYear() - years);
-        rangeStart.value = `${start.getFullYear()}-${String(start.getMonth() + 1).padStart(2, '0')}`;
+      const p = b.dataset.preset;
+      if (p === 'all') { rangeStart.value = '2000-01'; rangeEnd.value = getCurrentMonth(); }
+      else {
+        const s = new Date(); s.setFullYear(s.getFullYear() - parseInt(p));
+        rangeStart.value = `${s.getFullYear()}-${String(s.getMonth() + 1).padStart(2, '0')}`;
         rangeEnd.value = getCurrentMonth();
       }
       STATE.rangeStart = rangeStart.value;
@@ -628,8 +559,7 @@ async function init() {
     });
   });
   document.querySelector('.preset-btn[data-preset="all"]').classList.add('active');
-
-  renderMetals();
+  renderMaterials();
 }
 
 init().catch(err => {

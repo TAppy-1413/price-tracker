@@ -15,15 +15,19 @@
     <h1>IKS 価格高騰トラッカー</h1>
     <p class="subtitle">原材料・人件費・運賃の長期推移 ― 契約見直し・機械チャージ改定の根拠資料</p>
   </div>
-  <div class="meta">
-    <span id="last-updated">最終更新: 取得中...</span>
+  <div class="header-right">
+    <button id="refresh-btn" class="refresh-btn">データ更新</button>
+    <div class="meta">
+      <span id="last-updated">最終更新: 取得中...</span>
+    </div>
   </div>
 </header>
 
 <nav class="tabs">
-  <button class="tab-btn active" data-tab="metals">金属</button>
+  <button class="tab-btn active" data-tab="materials">材料</button>
   <button class="tab-btn" data-tab="difficult">難削材</button>
   <button class="tab-btn" data-tab="labor">人件費・最低賃金</button>
+  <button class="tab-btn" data-tab="electricity">電気代</button>
   <button class="tab-btn" data-tab="freight">運賃・燃料</button>
   <button class="tab-btn" data-tab="summary">サマリー</button>
 </nav>
@@ -45,16 +49,16 @@
 </section>
 
 <main>
-  <!-- METALS TAB -->
-  <section class="tab-panel active" id="tab-metals">
-    <h2>金属価格 (円/kg 換算)</h2>
-    <p class="note">出典: World Bank Commodity Markets (Pink Sheet) 月次公表 / USD建て価格を Yahoo Finance の月末 USD/JPY で円換算。
-    2000年1月を100とした指数表示では、各系列の相対的な上昇率を比較できます。</p>
+  <!-- MATERIALS TAB -->
+  <section class="tab-panel active" id="tab-materials">
+    <h2>材料価格 (円/kg)</h2>
+    <p class="note">SS400・SUS303・A5052 等の材料価格は、World Bank 国際商品価格 (アルミ・ニッケル・鉄鉱石) と USD/JPY 為替レートから
+    材料組成比に基づいて推定した参考値です。実勢価格とは乖離する場合があります。</p>
     <div class="chart-wrap">
-      <canvas id="chart-metals"></canvas>
+      <canvas id="chart-materials"></canvas>
     </div>
-    <div class="legend-filter" id="metals-filter"></div>
-    <div class="summary-cards" id="metals-cards"></div>
+    <div class="legend-filter" id="materials-filter"></div>
+    <div class="summary-cards" id="materials-cards"></div>
   </section>
 
   <!-- DIFFICULT MATERIALS TAB -->
@@ -62,9 +66,8 @@
     <h2>難削材 代理指標</h2>
     <p class="note">インコネル・ハステロイ・チタン等の難削材は相対取引が中心で公開時系列価格が存在しません。
     主要構成元素の国際価格を代理指標として表示します。<br>
-    <strong>ニッケル</strong> = インコネル系/ハステロイ系の主成分 (60-80%) <br>
-    <strong>錫・亜鉛</strong> = 高機能合金の参考 <br>
-    今後 USGS から チタン・モリブデン・コバルト を追加予定</p>
+    <strong>ニッケル</strong> = インコネル系/ハステロイ系の主成分 (60-80%)<br>
+    <strong>錫・亜鉛</strong> = 高機能合金の参考</p>
     <div class="chart-wrap">
       <canvas id="chart-difficult"></canvas>
     </div>
@@ -83,11 +86,22 @@
     <div class="summary-cards" id="wage-cards"></div>
   </section>
 
+  <!-- ELECTRICITY TAB -->
+  <section class="tab-panel" id="tab-electricity">
+    <h2>業務用電力料金 (円/kWh)</h2>
+    <p class="note">出典: 資源エネルギー庁 電力調査統計 (高圧 業務用)。年次データ。
+    栃木・群馬・茨城・埼玉・東京は東電管内の同一料金。</p>
+    <div class="chart-wrap">
+      <canvas id="chart-electricity"></canvas>
+    </div>
+    <div class="summary-cards" id="electricity-cards"></div>
+  </section>
+
   <!-- FREIGHT TAB -->
   <section class="tab-panel" id="tab-freight">
     <h2>トラック運賃指数</h2>
     <p class="note">出典: 日本銀行 企業向けサービス価格指数 (SPPI) - 道路貨物輸送。2020年=100。
-    国内で最も信頼性の高い運賃時系列指標。軽油価格は資源エネ庁から追加予定。</p>
+    国内で最も信頼性の高い運賃時系列指標。</p>
     <div class="chart-wrap">
       <canvas id="chart-freight"></canvas>
     </div>
@@ -97,14 +111,14 @@
   <!-- SUMMARY TAB -->
   <section class="tab-panel" id="tab-summary">
     <h2>価格高騰サマリー</h2>
-    <p class="note">主要項目の 2000年1月 → 最新月 の上昇率を一覧表示。契約見直し時の根拠資料に。</p>
+    <p class="note">主要項目の上昇率を一覧表示。比較基準年を変更して任意の時点からの変動を確認できます。</p>
     <div id="summary-table"></div>
   </section>
 </main>
 
 <footer>
-  <p>IKS 経営企画部 / データソース: World Bank, 日本銀行, 厚生労働省, Yahoo Finance<br>
-  すべて公開データに基づきます。為替は月末値。<br>
+  <p>IKS 経営企画部 / データソース: World Bank, 日本銀行, 厚生労働省, 資源エネルギー庁, Yahoo Finance<br>
+  すべて公開データに基づきます。材料価格は国際商品価格からの推定参考値。為替は月末値。<br>
   <span style="color:#999">予測線（破線）は直近5年間の線形回帰に基づく統計的トレンド推定です。将来の価格を保証するものではありません。</span></p>
 </footer>
 

@@ -42,6 +42,29 @@ header {
   margin-top: 4px;
 }
 
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.refresh-btn {
+  padding: 8px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+
+.refresh-btn:hover { opacity: 0.85; }
+.refresh-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
 .meta {
   font-size: 12px;
   color: var(--ink-2);
@@ -317,6 +340,28 @@ main {
 
 #summary-table td.change-up { color: var(--accent); font-weight: 700; }
 #summary-table td.change-down { color: #2e7d32; font-weight: 700; }
+
+.summary-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.summary-controls label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.summary-controls select {
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: white;
+  font-family: inherit;
+}
 
 footer {
   padding: 24px 32px;
