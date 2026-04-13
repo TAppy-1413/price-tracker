@@ -29,7 +29,8 @@
   <button class="tab-btn active" data-tab="materials">材料</button>
   <button class="tab-btn" data-tab="labor">人件費・最低賃金</button>
   <button class="tab-btn" data-tab="electricity">電気代</button>
-  <button class="tab-btn" data-tab="freight">運賃・燃料</button>
+  <button class="tab-btn" data-tab="freight">運賃</button>
+  <button class="tab-btn" data-tab="fuel">燃料</button>
   <button class="tab-btn" data-tab="summary">サマリー</button>
 </nav>
 
@@ -94,6 +95,17 @@
       <canvas id="chart-freight"></canvas>
     </div>
     <div class="summary-cards" id="freight-cards"></div>
+  </section>
+
+  <!-- FUEL TAB -->
+  <section class="tab-panel" id="tab-fuel">
+    <h2>燃料価格 (円/L)</h2>
+    <p class="note">出典: 日本銀行 企業物価指数 (CGPI) 2020年基準。
+    ガソリン・軽油・灯油の国内卸売価格指数を2020年基準価格で実価格に換算。</p>
+    <div class="chart-wrap">
+      <canvas id="chart-fuel"></canvas>
+    </div>
+    <div class="summary-cards" id="fuel-cards"></div>
   </section>
 
   <!-- SUMMARY TAB -->

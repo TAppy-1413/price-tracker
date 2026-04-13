@@ -37,6 +37,9 @@ const COLORS = {
   ocean_freight:     '#1a6b3c',
   air_freight:       '#8e24aa',
   coastal_freight:   '#f57c00',
+  gasoline:          '#e53935',
+  diesel:            '#1565c0',
+  kerosene:          '#ff8f00',
   tepco:             '#ff6600',
   chubu:             '#2c5aa0',
   kansai:            '#c8102e',
@@ -51,6 +54,7 @@ const LABELS = {
   osaka: '大阪', nationwide: '全国加重平均',
   sppi_total: 'SPPI総平均', road_freight: 'トラック運賃',
   ocean_freight: '外航船便', air_freight: '国際航空便', coastal_freight: '内航船便',
+  gasoline: 'ガソリン', diesel: '軽油', kerosene: '灯油',
   tepco: '東電管内', chubu: '中部電力', kansai: '関西電力', national: '全国平均',
 };
 
@@ -62,6 +66,7 @@ const UNITS = {
   osaka: '円/時', nationwide: '円/時',
   sppi_total: '指数(2020=100)', road_freight: '指数(2020=100)',
   ocean_freight: '指数(2020=100)', air_freight: '指数(2020=100)', coastal_freight: '指数(2020=100)',
+  gasoline: '円/L', diesel: '円/L', kerosene: '円/L',
   tepco: '円/kWh', chubu: '円/kWh', kansai: '円/kWh', national: '円/kWh',
 };
 
@@ -300,6 +305,11 @@ function renderFreight() {
   renderCards('freight-cards', STATE.sppi, ['road_freight', 'ocean_freight', 'air_freight', 'coastal_freight']);
 }
 
+function renderFuel() {
+  buildLineChart('chart-fuel', STATE.metals, ['gasoline', 'diesel', 'kerosene']);
+  renderCards('fuel-cards', STATE.metals, ['gasoline', 'diesel', 'kerosene']);
+}
+
 function renderSummary() {
   const container = document.getElementById('summary-table');
   const baseYear = STATE.summaryBaseYear;
@@ -315,6 +325,9 @@ function renderSummary() {
     { key: 'ocean_freight', src: STATE.sppi, category: '運賃' },
     { key: 'air_freight', src: STATE.sppi, category: '運賃' },
     { key: 'coastal_freight', src: STATE.sppi, category: '運賃' },
+    { key: 'gasoline', src: STATE.metals, category: '燃料' },
+    { key: 'diesel', src: STATE.metals, category: '燃料' },
+    { key: 'kerosene', src: STATE.metals, category: '燃料' },
     { key: 'tepco', src: STATE.electricity, category: '電気代', dateKey: 'year' },
     { key: 'national', src: STATE.electricity, category: '電気代', dateKey: 'year' },
     { key: 'tochigi', src: STATE.wage, category: '最低賃金', dateKey: 'year' },
@@ -504,6 +517,7 @@ function renderActiveTab() {
   else if (t === 'labor') renderWage();
   else if (t === 'electricity') renderElectricity();
   else if (t === 'freight') renderFreight();
+  else if (t === 'fuel') renderFuel();
   else if (t === 'summary') renderSummary();
 }
 
