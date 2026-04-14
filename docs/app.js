@@ -323,9 +323,11 @@ function renderWage() {
 }
 
 function renderElectricity() {
+  // 事業用電力 月次グラフ
   buildLineChart('chart-electricity', STATE.metals, ['electricity']);
-  // グラフ下: 各電力会社の年次データをカードで表示
+  // 電力会社別 年次グラフ
   if (STATE.electricity && STATE.electricity.length) {
+    buildLineChart('chart-electricity-region', STATE.electricity, ['tepco', 'chubu', 'kansai', 'national'], 'year');
     renderCards('electricity-cards', STATE.electricity, ['tepco', 'chubu', 'kansai', 'national'], 'year');
   }
 }
