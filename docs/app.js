@@ -8,7 +8,7 @@ const STATE = {
   metals: null,
   sppi: null,
   wage: null,
-  electricity: null,
+  electricity: null,  // legacy (年次シード) - 月次はmetalsから
   charts: {},
   filters: {
     materials: new Set(['ss400', 'aluminum_casting', 'iron_casting', 'sus303', 'a5052']),
@@ -42,6 +42,7 @@ const COLORS = {
   highoctane:        '#6a1b9a',
   diesel:            '#2e7d32',
   crude_oil:         '#1565c0',
+  electricity:       '#ff6600',
   tepco:             '#ff6600',
   chubu:             '#2c5aa0',
   kansai:            '#c8102e',
@@ -57,6 +58,7 @@ const LABELS = {
   sppi_total: 'SPPI総平均', road_freight: 'トラック運賃',
   ocean_freight: '外航船便', air_freight: '国際航空便', coastal_freight: '内航船便',
   regular: 'レギュラー', highoctane: 'ハイオク', diesel: '軽油', crude_oil: '原油',
+  electricity: '事業用電力',
   tepco: '東電管内', chubu: '中部電力', kansai: '関西電力', national: '全国平均',
 };
 
@@ -70,6 +72,7 @@ const UNITS = {
   ocean_freight: '円/100kg', air_freight: '円/100kg', coastal_freight: '円/100kg',
   road_freight: '円/100kg',
   regular: '円/L', highoctane: '円/L', diesel: '円/L', crude_oil: '円/L',
+  electricity: '円/kWh',
   tepco: '円/kWh', chubu: '円/kWh', kansai: '円/kWh', national: '円/kWh',
 };
 
@@ -320,9 +323,9 @@ function renderWage() {
 }
 
 function renderElectricity() {
-  if (!STATE.electricity || !STATE.electricity.length) return;
-  buildLineChart('chart-electricity', STATE.electricity, ['tepco', 'chubu', 'kansai', 'national'], 'year');
-  renderCards('electricity-cards', STATE.electricity, ['tepco', 'national'], 'year');
+  // CGPI月次の事業用電力 (materials.csv に含まれる)
+  buildLineChart('chart-electricity', STATE.metals, ['electricity']);
+  renderCards('electricity-cards', STATE.metals, ['electricity']);
 }
 
 function renderFreight() {
@@ -354,8 +357,7 @@ function renderSummary() {
     { key: 'highoctane', src: STATE.metals, category: '燃料' },
     { key: 'diesel', src: STATE.metals, category: '燃料' },
     { key: 'crude_oil', src: STATE.metals, category: '燃料' },
-    { key: 'tepco', src: STATE.electricity, category: '電気代', dateKey: 'year' },
-    { key: 'national', src: STATE.electricity, category: '電気代', dateKey: 'year' },
+    { key: 'electricity', src: STATE.metals, category: '電気代' },
     { key: 'tochigi', src: STATE.wage, category: '最低賃金', dateKey: 'year' },
     { key: 'tokyo', src: STATE.wage, category: '最低賃金', dateKey: 'year' },
     { key: 'nationwide', src: STATE.wage, category: '最低賃金', dateKey: 'year' },
@@ -554,7 +556,7 @@ function getTabDataRange(name) {
     fuel:        { start: STATE.metals?.[0]?.date?.substring(0, 7) || '2020-01',
                    end: STATE.metals?.[STATE.metals.length - 1]?.date?.substring(0, 7) || getCurrentMonth() },
     labor:       { start: '2000-01', end: getCurrentMonth() },
-    electricity: { start: '2000-01', end: getCurrentMonth() },
+    electricity: { start: STATE.metals?.[0]?.date?.substring(0, 7) || '2020-01', end: getCurrentMonth() },
     freight:     { start: '2000-01', end: getCurrentMonth() },
     summary:     { start: '2000-01', end: getCurrentMonth() },
   };

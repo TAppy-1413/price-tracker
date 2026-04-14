@@ -32,6 +32,7 @@ CGPI_CODES = {
     'PRCG20_2200650001': 'regular',             # レギュラーガソリン
     'PRCG20_2200650005': 'diesel',              # 軽油
     'PRCG20_2600550010': 'crude_oil',           # 原油
+    'PRCG20_2202250001': 'electricity',         # 事業用電力
 }
 
 # 2020年基準価格 — 業界相場から設定
@@ -43,6 +44,7 @@ BASE_PRICES_2020 = {
     'sus303':           420,   # 円/kg ステンレス冷延
     'a5052':            320,   # 円/kg アルミ圧延板
     'crude_oil':        35,    # 円/L 原油 (2020年基準)
+    'electricity':      16,    # 円/kWh 事業用電力 (2020年基準)
 }
 
 # 燃料小売: CGPI は卸売指数なので、税金+マージン(固定)と卸売(変動)を分離
@@ -217,7 +219,7 @@ def main():
             combined['highoctane'] = (combined['regular'] + 11).round(1)
 
         cols = ['date', 'ss400', 'aluminum_casting', 'iron_casting', 'sus303', 'a5052',
-                'regular', 'highoctane', 'diesel', 'crude_oil']
+                'regular', 'highoctane', 'diesel', 'crude_oil', 'electricity']
         cols = [c for c in cols if c in combined.columns]
         combined = combined[cols]
 
