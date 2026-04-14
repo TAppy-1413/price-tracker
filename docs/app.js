@@ -202,8 +202,6 @@ function forecast(rows, key, dateKey, months) {
 // -------------------------------------------------------------
 function buildLineChart(canvasId, rows, keys, dateKey = 'date') {
   const canvas = document.getElementById(canvasId);
-  const parent = canvas.parentElement;
-  canvas.style.height = parent.offsetHeight + 'px';
   const ctx = canvas.getContext('2d');
   if (STATE.charts[canvasId]) STATE.charts[canvasId].destroy();
   const filtered = filterRange(rows, dateKey);
