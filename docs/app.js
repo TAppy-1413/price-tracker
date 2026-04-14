@@ -201,7 +201,10 @@ function forecast(rows, key, dateKey, months) {
 // Chart builder
 // -------------------------------------------------------------
 function buildLineChart(canvasId, rows, keys, dateKey = 'date') {
-  const ctx = document.getElementById(canvasId).getContext('2d');
+  const canvas = document.getElementById(canvasId);
+  const parent = canvas.parentElement;
+  canvas.style.height = parent.offsetHeight + 'px';
+  const ctx = canvas.getContext('2d');
   if (STATE.charts[canvasId]) STATE.charts[canvasId].destroy();
   const filtered = filterRange(rows, dateKey);
   const isYear = dateKey === 'year';
@@ -242,9 +245,30 @@ function buildLineChart(canvasId, rows, keys, dateKey = 'date') {
     }
   });
 
-  const span = all.length;
+  // 実データの期間（選択範囲）からX軸の単位を決定
+  const actualMonths = filtered.length;
   let unit = 'year';
-  if (span <= 18) unit = 'month'; else if (span <= 48) unit = 'quarter';
+  if (actualMonths <= 18) unit = 'month';
+  else if (actualMonths <= 48) unit = 'quarter';
+
+  // X軸の範囲: 実データ開始〜予測終了
+  let xMin, xMax;
+  if (!isYear && all.length > 0) {
+    xMin = all[0];
+    xMax = all[all.length - 1];
+  }
+
+  const xScale = isYear ? {
+    type: 'category',
+    ticks: { callback: function(v) { return this.getLabelForValue(v) + '年'; }, maxTicksLimit: 15, autoSkip: true },
+    grid: { display: false },
+  } : {
+    type: 'time',
+    min: xMin, max: xMax,
+    time: { unit, displayFormats: { month: 'yyyy/MM', quarter: 'yyyy/MM', year: 'yyyy' }, tooltipFormat: 'yyyy年MM月' },
+    ticks: { maxTicksLimit: 12, autoSkip: true, font: { size: 11 } },
+    grid: { display: false },
+  };
 
   STATE.charts[canvasId] = new Chart(ctx, {
     type: 'line', data: { labels: all, datasets },
@@ -270,19 +294,7 @@ function buildLineChart(canvasId, rows, keys, dateKey = 'date') {
           },
         },
       },
-      scales: {
-        x: isYear ? {
-          type: 'category',
-          ticks: { callback: function(v) { return this.getLabelForValue(v) + '年'; }, maxTicksLimit: 15, autoSkip: true },
-          grid: { display: false },
-        } : {
-          type: 'time',
-          time: { unit, displayFormats: { month: 'yyyy/MM', quarter: 'yyyy/MM', year: 'yyyy' }, tooltipFormat: 'yyyy年MM月' },
-          ticks: { maxTicksLimit: 15, autoSkip: true, font: { size: 11 } },
-          grid: { display: false },
-        },
-        y: { beginAtZero: false, grid: { color: 'rgba(0,0,0,0.06)' }, ticks: { font: { size: 11 } } },
-      },
+      scales: { x: xScale, y: { beginAtZero: false, grid: { color: 'rgba(0,0,0,0.06)' }, ticks: { font: { size: 11 } } } },
     },
   });
 }
