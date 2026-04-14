@@ -520,26 +520,57 @@ function renderWageFilter() {
 // -------------------------------------------------------------
 // Tab switching
 // -------------------------------------------------------------
+function getTabDataRange(name) {
+  const ranges = {
+    materials:   { start: STATE.metals?.[0]?.date?.substring(0, 7) || '2020-01',
+                   end: STATE.metals?.[STATE.metals.length - 1]?.date?.substring(0, 7) || getCurrentMonth() },
+    fuel:        { start: STATE.metals?.[0]?.date?.substring(0, 7) || '2020-01',
+                   end: STATE.metals?.[STATE.metals.length - 1]?.date?.substring(0, 7) || getCurrentMonth() },
+    labor:       { start: '2000-01', end: getCurrentMonth() },
+    electricity: { start: '2000-01', end: getCurrentMonth() },
+    freight:     { start: '2000-01', end: getCurrentMonth() },
+    summary:     { start: '2000-01', end: getCurrentMonth() },
+  };
+  return ranges[name] || { start: '2000-01', end: getCurrentMonth() };
+}
+
 function switchTab(name) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === `tab-${name}`));
 
-  // タブのデータ開始日に合わせて期間セレクタのminを調整
-  const tabDataStart = {
-    materials: STATE.metals?.[0]?.date?.substring(0, 7) || '2020-01',
-    fuel:      STATE.metals?.[0]?.date?.substring(0, 7) || '2020-01',
-    labor:     '2000-01',
-    electricity: '2000-01',
-    freight:   '2000-01',
-    summary:   '2000-01',
-  };
-  const minDate = tabDataStart[name] || '2000-01';
+  const range = getTabDataRange(name);
   const rangeStart = document.getElementById('range-start');
-  rangeStart.min = minDate;
-  if (rangeStart.value < minDate) {
-    rangeStart.value = minDate;
-    STATE.rangeStart = minDate;
+  const rangeEnd = document.getElementById('range-end');
+
+  // min/max を設定してデータ範囲外を選択不可に
+  rangeStart.min = range.start;
+  rangeEnd.min = range.start;
+
+  // 値がデータ範囲外なら強制修正
+  if (rangeStart.value < range.start) {
+    rangeStart.value = range.start;
+    STATE.rangeStart = range.start;
   }
+  if (rangeEnd.value < range.start) {
+    rangeEnd.value = range.end;
+    STATE.rangeEnd = range.end;
+  }
+
+  // プリセットボタンの有効/無効
+  document.querySelectorAll('.preset-btn').forEach(b => {
+    const preset = b.dataset.preset;
+    if (preset === 'all') {
+      b.disabled = false;
+    } else {
+      const years = parseInt(preset);
+      const presetStart = new Date();
+      presetStart.setFullYear(presetStart.getFullYear() - years);
+      const presetMonth = `${presetStart.getFullYear()}-${String(presetStart.getMonth() + 1).padStart(2, '0')}`;
+      b.disabled = presetMonth < range.start;
+      b.style.opacity = b.disabled ? '0.3' : '1';
+      b.style.pointerEvents = b.disabled ? 'none' : 'auto';
+    }
+  });
 
   renderActiveTab();
 }
@@ -623,7 +654,10 @@ async function init() {
   document.querySelectorAll('.preset-btn').forEach(b => {
     b.addEventListener('click', () => {
       const p = b.dataset.preset;
-      if (p === 'all') { rangeStart.value = '2000-01'; rangeEnd.value = getCurrentMonth(); }
+      if (p === 'all') {
+        const r = getTabDataRange(getActiveTab());
+        rangeStart.value = r.start; rangeEnd.value = getCurrentMonth();
+      }
       else {
         const s = new Date(); s.setFullYear(s.getFullYear() - parseInt(p));
         rangeStart.value = `${s.getFullYear()}-${String(s.getMonth() + 1).padStart(2, '0')}`;
@@ -637,7 +671,8 @@ async function init() {
     });
   });
   document.querySelector('.preset-btn[data-preset="all"]').classList.add('active');
-  renderMaterials();
+  // 初回: 材料タブのデータ範囲に合わせる
+  switchTab('materials');
 }
 
 init().catch(err => {
