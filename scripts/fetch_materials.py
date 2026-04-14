@@ -35,15 +35,30 @@ CGPI_CODES = {
 }
 
 # 2020年基準価格 — 業界相場から設定
+# 材料: 指数×基準価格/100 でそのまま換算 (B2B卸売価格)
 BASE_PRICES_2020 = {
     'ss400':            75,    # 円/kg 普通鋼構造材
     'aluminum_casting': 350,   # 円/kg アルミダイカスト
     'iron_casting':     85,    # 円/kg 銑鉄鋳物
     'sus303':           420,   # 円/kg ステンレス冷延
     'a5052':            320,   # 円/kg アルミ圧延板
-    'regular':          133,   # 円/L ガソスタ小売 2020年平均
-    'diesel':           112,   # 円/L ガソスタ小売 2020年平均
     'crude_oil':        35,    # 円/L 原油 (2020年基準)
+}
+
+# 燃料小売: CGPI は卸売指数なので、税金+マージン(固定)と卸売(変動)を分離
+# 小売価格 = 卸売成分 × CGPI指数/100 + 固定成分(税金+マージン)
+# 参考: ガソリン税53.8円, 石油石炭税2.8円, 軽油引取税32.1円, 消費税10%
+FUEL_RETAIL_MODEL = {
+    'regular': {
+        'variable_2020': 55,    # 卸売成分 (2020年, 税前)
+        'fixed': 78,            # ガソリン税53.8 + 石油石炭税2.8 + マージン21.4
+        # 小売 = (55×index/100 + 78) = 133 when index=100
+    },
+    'diesel': {
+        'variable_2020': 48,    # 卸売成分
+        'fixed': 64,            # 軽油引取税32.1 + 石油石炭税2.8 + マージン29.1
+        # 小売 = (48×index/100 + 64) = 112 when index=100
+    },
 }
 
 
@@ -114,10 +129,17 @@ def _extract_series(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def index_to_price(df: pd.DataFrame) -> pd.DataFrame:
-    """指数 (2020=100) → 円/kg に換算"""
+    """指数 (2020=100) → 実価格に換算"""
+    # 材料・原油: 単純換算
     for mat, base_price in BASE_PRICES_2020.items():
         if mat in df.columns:
             df[mat] = (df[mat] * base_price / 100).round(1)
+    # 燃料小売: 税金分離モデル (卸売×指数 + 固定税金)
+    for fuel, model in FUEL_RETAIL_MODEL.items():
+        if fuel in df.columns:
+            df[fuel] = (
+                model['variable_2020'] * df[fuel] / 100 + model['fixed']
+            ).round(1)
     return df
 
 
@@ -146,9 +168,9 @@ def main():
         combined['date'] = combined['date'].dt.strftime('%Y-%m-%d')
 
         # 列順を揃える
-        # ハイオク = レギュラーと同じ指数変動 + 基準価格差
+        # ハイオク = レギュラー + 約11円/L (ハイオクプレミアム)
         if 'regular' in combined.columns:
-            combined['highoctane'] = (combined['regular'] / BASE_PRICES_2020['regular'] * 144).round(1)
+            combined['highoctane'] = (combined['regular'] + 11).round(1)
 
         cols = ['date', 'ss400', 'aluminum_casting', 'iron_casting', 'sus303', 'a5052',
                 'regular', 'highoctane', 'diesel', 'crude_oil']
