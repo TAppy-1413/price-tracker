@@ -16,6 +16,7 @@ const STATE = {
   },
   summaryBaseYear: '2000',
   summaryCompareYear: '',  // empty = latest
+  materialUnit: 'kg',  // 'kg' or 't'
 };
 
 const COLORS = {
@@ -200,7 +201,7 @@ function forecast(rows, key, dateKey, months) {
 // -------------------------------------------------------------
 // Chart builder
 // -------------------------------------------------------------
-function buildLineChart(canvasId, rows, keys, dateKey = 'date') {
+function buildLineChart(canvasId, rows, keys, dateKey = 'date', unitMultiplier = 1) {
   const canvas = document.getElementById(canvasId);
   const ctx = canvas.getContext('2d');
   if (STATE.charts[canvasId]) STATE.charts[canvasId].destroy();
@@ -209,7 +210,7 @@ function buildLineChart(canvasId, rows, keys, dateKey = 'date') {
   const labels = filtered.map(r => isYear ? String(r[dateKey]) : new Date(r[dateKey] + 'T00:00:00'));
   const datasets = keys.map(k => ({
     label: LABELS[k] || k,
-    data: filtered.map(r => r[k] == null || isNaN(r[k]) ? null : r[k]),
+    data: filtered.map(r => r[k] == null || isNaN(r[k]) ? null : Math.round(r[k] * unitMultiplier * 100) / 100),
     borderColor: COLORS[k] || '#999', backgroundColor: COLORS[k] || '#999',
     borderWidth: 2, pointRadius: 0, pointHoverRadius: 4, tension: 0.3, spanGaps: true,
   }));
@@ -224,7 +225,7 @@ function buildLineChart(canvasId, rows, keys, dateKey = 'date') {
       label: `${LABELS[k]} 予測`, data: [],
       borderColor: COLORS[k] || '#999', backgroundColor: 'transparent',
       borderWidth: 2, borderDash: [8, 4], pointRadius: 0, pointHoverRadius: 4,
-      tension: 0.3, spanGaps: true, _fcMap: Object.fromEntries(fc.labels.map((l, i) => [String(l), fc.values[i]])),
+      tension: 0.3, spanGaps: true, _fcMap: Object.fromEntries(fc.labels.map((l, i) => [String(l), Math.round(fc.values[i] * unitMultiplier * 100) / 100])),
     });
   });
 
@@ -302,9 +303,13 @@ function buildLineChart(canvasId, rows, keys, dateKey = 'date') {
 // -------------------------------------------------------------
 function renderMaterials() {
   const keys = [...STATE.filters.materials];
-  buildLineChart('chart-materials', STATE.metals, keys);
-  renderCards('materials-cards', STATE.metals, ['ss400', 'aluminum_casting', 'iron_casting', 'sus303', 'a5052']);
+  const mult = STATE.materialUnit === 't' ? 1000 : 1;
+  const unitLabel = STATE.materialUnit === 't' ? '円/t' : '円/kg';
+  document.querySelector('#tab-materials h2').textContent = `材料価格 (${unitLabel})`;
+  buildLineChart('chart-materials', STATE.metals, keys, 'date', mult);
+  renderCards('materials-cards', STATE.metals, ['ss400', 'aluminum_casting', 'iron_casting', 'sus303', 'a5052'], 'date', mult);
   renderMaterialFilter();
+  renderUnitToggle();
 }
 
 function renderWage() {
@@ -438,7 +443,7 @@ function renderSummary() {
 // -------------------------------------------------------------
 // Cards (期間選択の開始時点と比較)
 // -------------------------------------------------------------
-function renderCards(containerId, rows, keys, dateKey = 'date') {
+function renderCards(containerId, rows, keys, dateKey = 'date', unitMult = 1) {
   const c = document.getElementById(containerId);
   if (!c) return;
   c.innerHTML = '';
@@ -446,13 +451,14 @@ function renderCards(containerId, rows, keys, dateKey = 'date') {
   for (const k of keys) {
     const valid = filtered.filter(r => !isNaN(r[k]));
     if (!valid.length) continue;
-    const first = valid[0][k];
-    const last = valid[valid.length - 1][k];
+    const first = valid[0][k] * unitMult;
+    const last = valid[valid.length - 1][k] * unitMult;
     const pct = ((last - first) / first * 100);
     const cls = pct >= 0 ? 'up' : 'down';
     const sign = pct >= 0 ? '+' : '';
-    const fmt = v => v.toLocaleString('ja-JP', { maximumFractionDigits: 1 });
-    const unit = UNITS[k] || '';
+    const fmt = v => v.toLocaleString('ja-JP', { maximumFractionDigits: unitMult >= 1000 ? 0 : 1 });
+    let unit = UNITS[k] || '';
+    if (unitMult >= 1000 && unit.includes('円/kg')) unit = '円/t';
 
     // Period label
     let periodLabel;
@@ -475,6 +481,27 @@ function renderCards(containerId, rows, keys, dateKey = 'date') {
 // -------------------------------------------------------------
 // Filter chips
 // -------------------------------------------------------------
+function renderUnitToggle() {
+  let el = document.getElementById('unit-toggle');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'unit-toggle';
+    el.className = 'unit-toggle';
+    const filterEl = document.getElementById('materials-filter');
+    filterEl.parentElement.insertBefore(el, filterEl);
+  }
+  const isKg = STATE.materialUnit === 'kg';
+  el.innerHTML = `
+    <button class="unit-btn ${isKg ? 'active' : ''}" data-unit="kg">円/kg</button>
+    <button class="unit-btn ${!isKg ? 'active' : ''}" data-unit="t">円/t</button>`;
+  el.querySelectorAll('.unit-btn').forEach(b => {
+    b.onclick = () => {
+      STATE.materialUnit = b.dataset.unit;
+      renderMaterials();
+    };
+  });
+}
+
 function renderMaterialFilter() {
   const all = ['ss400', 'aluminum_casting', 'iron_casting', 'sus303', 'a5052'];
   const c = document.getElementById('materials-filter');

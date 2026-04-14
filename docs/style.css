@@ -251,6 +251,32 @@ main {
   height: 380px;
 }
 
+.unit-toggle {
+  display: inline-flex;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.unit-btn {
+  padding: 6px 16px;
+  background: transparent;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--ink-2);
+  font-family: inherit;
+  font-weight: 500;
+}
+
+.unit-btn.active {
+  background: var(--accent);
+  color: white;
+  font-weight: 600;
+}
+
 .legend-filter {
   display: flex;
   flex-wrap: wrap;
