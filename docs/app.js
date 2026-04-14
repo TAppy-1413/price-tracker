@@ -1,5 +1,5 @@
 // =============================================================
-// IKS コストトレンドモニター - ダッシュボードロジック
+// コストトレンドモニター - ダッシュボードロジック
 // =============================================================
 
 const STATE = {
@@ -523,6 +523,24 @@ function renderWageFilter() {
 function switchTab(name) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === `tab-${name}`));
+
+  // タブのデータ開始日に合わせて期間セレクタのminを調整
+  const tabDataStart = {
+    materials: STATE.metals?.[0]?.date?.substring(0, 7) || '2020-01',
+    fuel:      STATE.metals?.[0]?.date?.substring(0, 7) || '2020-01',
+    labor:     '2000-01',
+    electricity: '2000-01',
+    freight:   '2000-01',
+    summary:   '2000-01',
+  };
+  const minDate = tabDataStart[name] || '2000-01';
+  const rangeStart = document.getElementById('range-start');
+  rangeStart.min = minDate;
+  if (rangeStart.value < minDate) {
+    rangeStart.value = minDate;
+    STATE.rangeStart = minDate;
+  }
+
   renderActiveTab();
 }
 

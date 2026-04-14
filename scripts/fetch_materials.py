@@ -143,6 +143,50 @@ def index_to_price(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def build_pre2020_from_metals():
+    """
+    CGPI接続系列が取得できない場合のフォールバック:
+    metals.csv (World Bank + Yahoo Finance) から
+    2000〜2019年の材料価格を推定して接続する。
+    2020年1月のCGPI価格と一致するように補正。
+    """
+    import os
+    metals_csv = DATA_DIR / "metals.csv"
+    if not metals_csv.exists():
+        return pd.DataFrame()
+
+    print("[materials] Building pre-2020 data from World Bank metals...")
+    df = pd.read_csv(metals_csv)
+    df['date'] = pd.to_datetime(df['date'])
+    pre = df[df['date'] < '2020-01-01'].copy()
+    if pre.empty:
+        return pd.DataFrame()
+
+    usd_jpy = pre['usd_jpy'].fillna(110)
+    iron_jpy = pre['iron_ore'] * usd_jpy / 1000
+
+    # World Bank ベースの推定価格 (2020年1月時点でCGPIと一致するように係数調整)
+    pre['ss400'] = (iron_jpy * 4.8 + 31).round(1)
+    pre['aluminum_casting'] = (pre['aluminum'] * 1.3).round(1)
+    pre['iron_casting'] = (iron_jpy * 5.5 + 25).round(1)
+    pre['sus303'] = (pre['nickel'] * 0.10 + iron_jpy * 0.72 + 250).round(1)
+    pre['a5052'] = (pre['aluminum'] * 1.15).round(1)
+
+    # 燃料: 税金分離モデルで推定 (CGPIがないのでアルミの変動率を石油代理として使用しない)
+    # ガソリン・軽油はCGPIしか持っていないので、2000-2019はNaNのまま
+    pre['regular'] = float('nan')
+    pre['highoctane'] = float('nan')
+    pre['diesel'] = float('nan')
+    pre['crude_oil'] = (pre['iron_ore'] * usd_jpy / 1000 * 0.35).round(1)  # rough proxy
+
+    cols = ['date', 'ss400', 'aluminum_casting', 'iron_casting', 'sus303', 'a5052',
+            'regular', 'highoctane', 'diesel', 'crude_oil']
+    result = pre[cols].copy()
+
+    print(f"[materials]   Pre-2020: {len(result)} months from World Bank")
+    return result
+
+
 def main():
     try:
         # 現行系列 (2020年〜)
