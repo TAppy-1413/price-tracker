@@ -539,18 +539,22 @@ function renderCards(containerId, rows, keys, dateKey = 'date', unitMult = 1) {
     let unit = UNITS[k] || '';
     if (unitMult >= 1000 && unit.includes('円/kg')) unit = '円/t';
 
-    // Period label
-    let periodLabel;
+    // Period label & 最新値の日付
+    let periodLabel, latestDateLabel;
     if (dateKey === 'year') {
       periodLabel = `${valid[0].year}年比`;
+      latestDateLabel = `${valid[valid.length - 1].year}年`;
     } else {
       const sd = valid[0].date.substring(0, 7);
       periodLabel = `${sd}比`;
+      const ld = valid[valid.length - 1].date.substring(0, 7);
+      const [y, m] = ld.split('-');
+      latestDateLabel = `${y}年${parseInt(m)}月`;
     }
 
     c.insertAdjacentHTML('beforeend', `
       <div class="card">
-        <div class="card-label">${LABELS[k]}</div>
+        <div class="card-label">${LABELS[k]} <span style="font-weight:400;color:var(--ink-2);font-size:11px">(${latestDateLabel})</span></div>
         <div class="card-value">${fmt(last)} <span style="font-size:12px;font-weight:400;color:var(--ink-2)">${unit}</span></div>
         <div class="card-change ${cls}">${sign}${pct.toFixed(1)}% (${periodLabel})</div>
       </div>`);
