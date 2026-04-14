@@ -323,9 +323,11 @@ function renderWage() {
 }
 
 function renderElectricity() {
-  // CGPI月次の事業用電力 (materials.csv に含まれる)
-  buildLineChart('chart-electricity', STATE.metals, ['electricity']);
-  renderCards('electricity-cards', STATE.metals, ['electricity']);
+  // 年次シードデータ (全国・東電・中部・関西) + CGPI月次
+  if (STATE.electricity && STATE.electricity.length) {
+    buildLineChart('chart-electricity', STATE.electricity, ['tepco', 'chubu', 'kansai', 'national'], 'year');
+    renderCards('electricity-cards', STATE.electricity, ['tepco', 'national'], 'year');
+  }
 }
 
 function renderFreight() {
@@ -357,7 +359,8 @@ function renderSummary() {
     { key: 'highoctane', src: STATE.metals, category: '燃料' },
     { key: 'diesel', src: STATE.metals, category: '燃料' },
     { key: 'crude_oil', src: STATE.metals, category: '燃料' },
-    { key: 'electricity', src: STATE.metals, category: '電気代' },
+    { key: 'tepco', src: STATE.electricity, category: '電気代', dateKey: 'year' },
+    { key: 'national', src: STATE.electricity, category: '電気代', dateKey: 'year' },
     { key: 'tochigi', src: STATE.wage, category: '最低賃金', dateKey: 'year' },
     { key: 'tokyo', src: STATE.wage, category: '最低賃金', dateKey: 'year' },
     { key: 'nationwide', src: STATE.wage, category: '最低賃金', dateKey: 'year' },
@@ -556,7 +559,7 @@ function getTabDataRange(name) {
     fuel:        { start: STATE.metals?.[0]?.date?.substring(0, 7) || '2020-01',
                    end: STATE.metals?.[STATE.metals.length - 1]?.date?.substring(0, 7) || getCurrentMonth() },
     labor:       { start: '2000-01', end: getCurrentMonth() },
-    electricity: { start: STATE.metals?.[0]?.date?.substring(0, 7) || '2020-01', end: getCurrentMonth() },
+    electricity: { start: '2000-01', end: getCurrentMonth() },
     freight:     { start: '2000-01', end: getCurrentMonth() },
     summary:     { start: '2000-01', end: getCurrentMonth() },
   };
