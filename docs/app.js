@@ -43,6 +43,14 @@ const COLORS = {
   diesel:            '#2e7d32',
   crude_oil:         '#1565c0',
   electricity:       '#ff6600',
+  hokkaido:          '#1a6b3c', tohoku: '#2c5aa0',
+  hokuriku:          '#8b3a2e', chugoku: '#6c7a89',
+  shikoku:           '#d4a017', kyushu: '#c8702e',
+  okinawa:           '#8e24aa',
+  copper:            '#c8702e',
+  diesel_national:   '#1565c0', truck_surcharge: '#c8102e',
+  export_usa_20ft:   '#1a6b3c', export_eu_20ft: '#8e24aa',
+  export_asia_20ft:  '#f57c00',
   tepco:             '#ff6600',
   chubu:             '#2c5aa0',
   kansai:            '#c8102e',
@@ -59,6 +67,11 @@ const LABELS = {
   ocean_freight: '外航船便', air_freight: '国際航空便', coastal_freight: '内航船便',
   regular: 'レギュラー', highoctane: 'ハイオク', diesel: '軽油', crude_oil: '原油',
   electricity: '事業用電力',
+  hokkaido: '北海道電力', tohoku: '東北電力', hokuriku: '北陸電力',
+  chugoku: '中国電力', shikoku: '四国電力', kyushu: '九州電力', okinawa: '沖縄電力',
+  copper: '銅建値',
+  diesel_national: '軽油(全国)', truck_surcharge: 'トラックサーチャージ',
+  export_usa_20ft: '米国向け20ft', export_eu_20ft: '欧州向け20ft', export_asia_20ft: 'アジア向け20ft',
   tepco: '東電管内', chubu: '中部電力', kansai: '関西電力', national: '全国平均',
 };
 
@@ -73,6 +86,11 @@ const UNITS = {
   road_freight: '円/100kg',
   regular: '円/L', highoctane: '円/L', diesel: '円/L', crude_oil: '円/L',
   electricity: '円/kWh',
+  hokkaido: '円/kWh', tohoku: '円/kWh', hokuriku: '円/kWh',
+  chugoku: '円/kWh', shikoku: '円/kWh', kyushu: '円/kWh', okinawa: '円/kWh',
+  copper: '円/kg',
+  diesel_national: '円/L', truck_surcharge: '円/車',
+  export_usa_20ft: 'US$/20ft', export_eu_20ft: 'US$/20ft', export_asia_20ft: 'US$/20ft',
   tepco: '円/kWh', chubu: '円/kWh', kansai: '円/kWh', national: '円/kWh',
 };
 
@@ -109,13 +127,52 @@ async function loadManifest() {
 }
 
 async function loadAll() {
-  const [materials, sppi, wage, electricity, manifest] = await Promise.all([
+  const [materials, sppi, wage, electricity, jSteel, jAlu, jCopper, jElec, jTruck, jSea, manifest] = await Promise.all([
     loadCSV('data/materials.csv'),
     loadCSV('data/sppi.csv'),
     loadCSV('data/min_wage.csv'),
     loadCSV('data/electricity.csv').catch(() => []),
+    loadCSV('data/japia_steel.csv').catch(() => []),
+    loadCSV('data/japia_aluminum.csv').catch(() => []),
+    loadCSV('data/japia_copper.csv').catch(() => []),
+    loadCSV('data/japia_electricity.csv').catch(() => []),
+    loadCSV('data/japia_truck.csv').catch(() => []),
+    loadCSV('data/japia_sea.csv').catch(() => []),
     loadManifest(),
   ]);
+  STATE.japia = { steel: jSteel, alu: jAlu, copper: jCopper, elec: jElec, truck: jTruck, sea: jSea };
+
+  // JAPIA steel/aluminum → 材料カラムに統合
+  // ss400 = 熱延鋼板(千円/t = 円/kg), iron_casting = 冷延鋼板
+  // a5052 = アルミ新地金, aluminum_casting = アルミ再生塊
+  if (jSteel.length && materials.length) {
+    const steelMap = Object.fromEntries(jSteel.map(r => [r.date, r]));
+    const aluMap = Object.fromEntries(jAlu.map(r => [r.date, r]));
+    const copperMap = Object.fromEntries(jCopper.map(r => [r.date, r]));
+    materials.forEach(m => {
+      const s = steelMap[m.date];
+      const a = aluMap[m.date];
+      const c = copperMap[m.date];
+      if (s && !isNaN(s.hot_rolled)) m.ss400 = s.hot_rolled;
+      if (s && !isNaN(s.cold_rolled)) m.iron_casting = s.cold_rolled;
+      if (a && !isNaN(a.al_ingot)) m.a5052 = a.al_ingot;
+      if (a && !isNaN(a.al_recycled)) m.aluminum_casting = a.al_recycled;
+      if (c && !isNaN(c.copper)) m.copper = c.copper;
+    });
+    // JAPIA のデータ範囲の方が広い場合、2020年以前のレコードも追加
+    const existingDates = new Set(materials.map(m => m.date));
+    jSteel.forEach(s => {
+      if (!existingDates.has(s.date) && s.date >= '2000-01-01') {
+        const row = { date: s.date, ss400: s.hot_rolled, iron_casting: s.cold_rolled };
+        const a = aluMap[s.date];
+        if (a) { row.a5052 = a.al_ingot; row.aluminum_casting = a.al_recycled; }
+        const c = copperMap[s.date];
+        if (c) row.copper = c.copper;
+        materials.push(row);
+      }
+    });
+    materials.sort((a, b) => a.date.localeCompare(b.date));
+  }
   STATE.metals = materials;  // materials.csv (日銀CGPI)
 
   // SPPI指数 → 円/100kg 換算 (2020年基準単価)
@@ -323,11 +380,17 @@ function renderWage() {
 }
 
 function renderElectricity() {
-  // 事業用電力 月次グラフ
-  buildLineChart('chart-electricity', STATE.metals, ['electricity']);
-  // 電力会社別 年次グラフ
-  if (STATE.electricity && STATE.electricity.length) {
-    buildLineChart('chart-electricity-region', STATE.electricity, ['tepco', 'chubu', 'kansai', 'national'], 'year');
+  // JAPIA 10社の月次データがあればそれを使用、なければ年次データフォールバック
+  const japiaElec = STATE.japia?.elec || [];
+  if (japiaElec.length) {
+    const companies = ['tepco', 'chubu', 'kansai', 'hokkaido', 'tohoku', 'hokuriku', 'chugoku', 'shikoku', 'kyushu', 'okinawa'];
+    buildLineChart('chart-electricity', japiaElec, companies);
+    renderCards('electricity-cards', japiaElec, companies);
+    // 2つ目のグラフは非表示 (JAPIAに全部含まれる)
+    const secondCanvas = document.getElementById('chart-electricity-region');
+    if (secondCanvas) secondCanvas.parentElement.parentElement.style.display = 'none';
+  } else if (STATE.electricity && STATE.electricity.length) {
+    buildLineChart('chart-electricity', STATE.electricity, ['tepco', 'chubu', 'kansai', 'national'], 'year');
     renderCards('electricity-cards', STATE.electricity, ['tepco', 'chubu', 'kansai', 'national'], 'year');
   }
 }
@@ -338,6 +401,16 @@ function renderFreight() {
 }
 
 function renderFuel() {
+  // JAPIA軽油(全国)データがあれば、metalsのdieselをJAPIA値で上書き
+  const jTruck = STATE.japia?.truck || [];
+  if (jTruck.length && STATE.metals) {
+    const dieselMap = Object.fromEntries(jTruck.map(r => [r.date, r.diesel_national]));
+    STATE.metals.forEach(m => {
+      if (dieselMap[m.date] != null && !isNaN(dieselMap[m.date])) {
+        m.diesel = dieselMap[m.date];
+      }
+    });
+  }
   buildLineChart('chart-fuel', STATE.metals, ['regular', 'highoctane', 'diesel', 'crude_oil']);
   renderCards('fuel-cards', STATE.metals, ['regular', 'highoctane', 'diesel', 'crude_oil']);
 }
@@ -560,7 +633,7 @@ function getTabDataRange(name) {
     fuel:        { start: STATE.metals?.[0]?.date?.substring(0, 7) || '2020-01',
                    end: STATE.metals?.[STATE.metals.length - 1]?.date?.substring(0, 7) || getCurrentMonth() },
     labor:       { start: '2000-01', end: getCurrentMonth() },
-    electricity: { start: STATE.metals?.[0]?.date?.substring(0, 7) || '2020-01', end: getCurrentMonth() },
+    electricity: { start: STATE.japia?.elec?.[0]?.date?.substring(0, 7) || '2011-04', end: getCurrentMonth() },
     freight:     { start: '2000-01', end: getCurrentMonth() },
     summary:     { start: '2000-01', end: getCurrentMonth() },
   };

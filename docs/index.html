@@ -78,13 +78,10 @@
   <!-- ELECTRICITY TAB -->
   <section class="tab-panel" id="tab-electricity">
     <h2>事業用電力料金 (円/kWh)</h2>
-    <p class="note">グラフ: 日銀CGPI事業用電力（月次）。カード: 資源エネルギー庁（年次、電力会社別）。</p>
+    <p class="note">出典: JAPIA 指標価格推移（電力会社HP・新電力ネット）。10電力会社別 月次データ。
+    燃料費調整単価+再エネ賦課金+基本料金(12円/kWh)で推定。</p>
     <div class="chart-wrap"><div class="chart-inner">
       <canvas id="chart-electricity"></canvas>
-    </div></div>
-    <h3 style="margin:20px 0 8px;font-size:16px">電力会社別 (円/kWh・年次)</h3>
-    <div class="chart-wrap"><div class="chart-inner">
-      <canvas id="chart-electricity-region"></canvas>
     </div></div>
     <div class="summary-cards" id="electricity-cards"></div>
   </section>

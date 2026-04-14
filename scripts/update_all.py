@@ -8,6 +8,7 @@ from pathlib import Path
 from datetime import datetime
 
 SCRIPTS = [
+    'fetch_japia.py',
     'fetch_metals.py',
     'fetch_materials.py',
     'fetch_sppi.py',

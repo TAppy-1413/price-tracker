@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-14 11:11 JST",
+  "generated_at": "2026-04-14 13:11 JST",
   "sources": {
     "diesel": {
       "rows": 0,
@@ -7,6 +7,34 @@
     },
     "electricity": {
       "rows": 26,
+      "latest": "2025"
+    },
+    "japia_aluminum": {
+      "rows": 182,
+      "latest": "2026-03-01"
+    },
+    "japia_copper": {
+      "rows": 290,
+      "latest": "2026-03-01"
+    },
+    "japia_electricity": {
+      "rows": 181,
+      "latest": "2026-04-01"
+    },
+    "japia_sea": {
+      "rows": 194,
+      "latest": "2026-02-01"
+    },
+    "japia_steel": {
+      "rows": 627,
+      "latest": "2026-04-01"
+    },
+    "japia_truck": {
+      "rows": 428,
+      "latest": "2026-03-01"
+    },
+    "japia_wage": {
+      "rows": 24,
       "latest": "2025"
     },
     "materials": {
