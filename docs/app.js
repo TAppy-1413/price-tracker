@@ -39,6 +39,7 @@ const COLORS = {
   coastal_freight:   '#f57c00',
   regular:           '#e53935',
   highoctane:        '#6a1b9a',
+  diesel:            '#2e7d32',
   crude_oil:         '#1565c0',
   tepco:             '#ff6600',
   chubu:             '#2c5aa0',
@@ -54,7 +55,7 @@ const LABELS = {
   osaka: '大阪', nationwide: '全国加重平均',
   sppi_total: 'SPPI総平均', road_freight: 'トラック運賃',
   ocean_freight: '外航船便', air_freight: '国際航空便', coastal_freight: '内航船便',
-  regular: 'レギュラー', highoctane: 'ハイオク', crude_oil: '原油',
+  regular: 'レギュラー', highoctane: 'ハイオク', diesel: '軽油', crude_oil: '原油',
   tepco: '東電管内', chubu: '中部電力', kansai: '関西電力', national: '全国平均',
 };
 
@@ -67,7 +68,7 @@ const UNITS = {
   sppi_total: '指数(2020=100)', road_freight: '指数(2020=100)',
   ocean_freight: '円/100kg', air_freight: '円/100kg', coastal_freight: '円/100kg',
   road_freight: '円/100kg',
-  regular: '円/L', highoctane: '円/L', crude_oil: '円/L',
+  regular: '円/L', highoctane: '円/L', diesel: '円/L', crude_oil: '円/L',
   tepco: '円/kWh', chubu: '円/kWh', kansai: '円/kWh', national: '円/kWh',
 };
 
@@ -315,8 +316,8 @@ function renderFreight() {
 }
 
 function renderFuel() {
-  buildLineChart('chart-fuel', STATE.metals, ['regular', 'highoctane', 'crude_oil']);
-  renderCards('fuel-cards', STATE.metals, ['regular', 'highoctane', 'crude_oil']);
+  buildLineChart('chart-fuel', STATE.metals, ['regular', 'highoctane', 'diesel', 'crude_oil']);
+  renderCards('fuel-cards', STATE.metals, ['regular', 'highoctane', 'diesel', 'crude_oil']);
 }
 
 function renderSummary() {
@@ -336,6 +337,7 @@ function renderSummary() {
     { key: 'coastal_freight', src: STATE.sppi, category: '運賃' },
     { key: 'regular', src: STATE.metals, category: '燃料' },
     { key: 'highoctane', src: STATE.metals, category: '燃料' },
+    { key: 'diesel', src: STATE.metals, category: '燃料' },
     { key: 'crude_oil', src: STATE.metals, category: '燃料' },
     { key: 'tepco', src: STATE.electricity, category: '電気代', dateKey: 'year' },
     { key: 'national', src: STATE.electricity, category: '電気代', dateKey: 'year' },
