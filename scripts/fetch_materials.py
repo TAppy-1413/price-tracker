@@ -29,9 +29,8 @@ CGPI_CODES = {
     'PRCG20_2201050013': 'a5052',              # アルミ圧延製品
     'PRCG20_2200950016': 'sus303',             # ステンレス冷延鋼板
     'PRCG20_2200930003': 'ss400',              # 鋳鍛造品 (普通鋼代理)
-    'PRCG20_2200650001': 'gasoline',           # ガソリン
+    'PRCG20_2200650001': 'regular',             # レギュラーガソリン
     'PRCG20_2200650005': 'diesel',             # 軽油
-    'PRCG20_2200650004': 'kerosene',           # 灯油
 }
 
 # 2020年基準価格 — 業界相場から設定
@@ -41,9 +40,8 @@ BASE_PRICES_2020 = {
     'iron_casting':     85,    # 円/kg 銑鉄鋳物
     'sus303':           420,   # 円/kg ステンレス冷延
     'a5052':            320,   # 円/kg アルミ圧延板
-    'gasoline':         135,   # 円/L レギュラーガソリン
+    'regular':          135,   # 円/L レギュラーガソリン
     'diesel':           115,   # 円/L 軽油
-    'kerosene':         85,    # 円/L 灯油
 }
 
 
@@ -146,8 +144,12 @@ def main():
         combined['date'] = combined['date'].dt.strftime('%Y-%m-%d')
 
         # 列順を揃える
+        # ハイオク = レギュラーと同じ指数変動 + 基準価格差
+        if 'regular' in combined.columns:
+            combined['highoctane'] = (combined['regular'] / BASE_PRICES_2020['regular'] * 146).round(1)
+
         cols = ['date', 'ss400', 'aluminum_casting', 'iron_casting', 'sus303', 'a5052',
-                'gasoline', 'diesel', 'kerosene']
+                'regular', 'highoctane', 'diesel']
         cols = [c for c in cols if c in combined.columns]
         combined = combined[cols]
 

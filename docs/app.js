@@ -37,9 +37,9 @@ const COLORS = {
   ocean_freight:     '#1a6b3c',
   air_freight:       '#8e24aa',
   coastal_freight:   '#f57c00',
-  gasoline:          '#e53935',
+  regular:           '#e53935',
+  highoctane:        '#6a1b9a',
   diesel:            '#1565c0',
-  kerosene:          '#ff8f00',
   tepco:             '#ff6600',
   chubu:             '#2c5aa0',
   kansai:            '#c8102e',
@@ -48,13 +48,13 @@ const COLORS = {
 
 const LABELS = {
   ss400: 'SS400', aluminum_casting: 'アルミ鋳物', iron_casting: '鉄鋳物',
-  sus303: 'SUS303', a5052: 'A5052',
+  sus303: 'SUS303', a5052: 'アルミニウム',
   tochigi: '栃木', gunma: '群馬', ibaraki: '茨城',
   saitama: '埼玉', tokyo: '東京', aichi: '愛知',
   osaka: '大阪', nationwide: '全国加重平均',
   sppi_total: 'SPPI総平均', road_freight: 'トラック運賃',
   ocean_freight: '外航船便', air_freight: '国際航空便', coastal_freight: '内航船便',
-  gasoline: 'ガソリン', diesel: '軽油', kerosene: '灯油',
+  regular: 'レギュラー', highoctane: 'ハイオク', diesel: '軽油',
   tepco: '東電管内', chubu: '中部電力', kansai: '関西電力', national: '全国平均',
 };
 
@@ -65,8 +65,9 @@ const UNITS = {
   saitama: '円/時', tokyo: '円/時', aichi: '円/時',
   osaka: '円/時', nationwide: '円/時',
   sppi_total: '指数(2020=100)', road_freight: '指数(2020=100)',
-  ocean_freight: '指数(2020=100)', air_freight: '指数(2020=100)', coastal_freight: '指数(2020=100)',
-  gasoline: '円/L', diesel: '円/L', kerosene: '円/L',
+  ocean_freight: '円/100kg', air_freight: '円/100kg', coastal_freight: '円/100kg',
+  road_freight: '円/100kg',
+  regular: '円/L', highoctane: '円/L', diesel: '円/L',
   tepco: '円/kWh', chubu: '円/kWh', kansai: '円/kWh', national: '円/kWh',
 };
 
@@ -111,6 +112,14 @@ async function loadAll() {
     loadManifest(),
   ]);
   STATE.metals = materials;  // materials.csv (日銀CGPI)
+
+  // SPPI指数 → 円/100kg 換算 (2020年基準単価)
+  const freightBase = { road_freight: 3500, ocean_freight: 2000, air_freight: 8000, coastal_freight: 1500 };
+  sppi.forEach(r => {
+    for (const [k, base] of Object.entries(freightBase)) {
+      if (!isNaN(r[k])) r[k] = Math.round(r[k] * base / 100);
+    }
+  });
   STATE.sppi = sppi;
   STATE.wage = wage;
   STATE.electricity = electricity;
@@ -306,8 +315,8 @@ function renderFreight() {
 }
 
 function renderFuel() {
-  buildLineChart('chart-fuel', STATE.metals, ['gasoline', 'diesel', 'kerosene']);
-  renderCards('fuel-cards', STATE.metals, ['gasoline', 'diesel', 'kerosene']);
+  buildLineChart('chart-fuel', STATE.metals, ['regular', 'highoctane', 'diesel']);
+  renderCards('fuel-cards', STATE.metals, ['regular', 'highoctane', 'diesel']);
 }
 
 function renderSummary() {
@@ -325,9 +334,9 @@ function renderSummary() {
     { key: 'ocean_freight', src: STATE.sppi, category: '運賃' },
     { key: 'air_freight', src: STATE.sppi, category: '運賃' },
     { key: 'coastal_freight', src: STATE.sppi, category: '運賃' },
-    { key: 'gasoline', src: STATE.metals, category: '燃料' },
+    { key: 'regular', src: STATE.metals, category: '燃料' },
+    { key: 'highoctane', src: STATE.metals, category: '燃料' },
     { key: 'diesel', src: STATE.metals, category: '燃料' },
-    { key: 'kerosene', src: STATE.metals, category: '燃料' },
     { key: 'tepco', src: STATE.electricity, category: '電気代', dateKey: 'year' },
     { key: 'national', src: STATE.electricity, category: '電気代', dateKey: 'year' },
     { key: 'tochigi', src: STATE.wage, category: '最低賃金', dateKey: 'year' },
