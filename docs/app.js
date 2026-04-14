@@ -324,7 +324,10 @@ function renderWage() {
 
 function renderElectricity() {
   buildLineChart('chart-electricity', STATE.metals, ['electricity']);
-  renderCards('electricity-cards', STATE.metals, ['electricity']);
+  // グラフ下: 各電力会社の年次データをカードで表示
+  if (STATE.electricity && STATE.electricity.length) {
+    renderCards('electricity-cards', STATE.electricity, ['tepco', 'chubu', 'kansai', 'national'], 'year');
+  }
 }
 
 function renderFreight() {
