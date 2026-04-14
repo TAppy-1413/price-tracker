@@ -665,6 +665,9 @@ function switchTab(name) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === `tab-${name}`));
 
+  // フォーカス中ならバックボタン表示
+  renderBackButton();
+
   const range = getTabDataRange(name);
   const rangeStart = document.getElementById('range-start');
   const rangeEnd = document.getElementById('range-end');
@@ -700,6 +703,27 @@ function switchTab(name) {
   });
 
   renderActiveTab();
+}
+
+function renderBackButton() {
+  let btn = document.getElementById('back-to-summary');
+  if (STATE.focusKey) {
+    if (!btn) {
+      btn = document.createElement('button');
+      btn.id = 'back-to-summary';
+      btn.className = 'back-btn';
+      btn.innerHTML = '← サマリーに戻る';
+      btn.onclick = () => {
+        STATE.focusKey = null;
+        switchTab('summary');
+      };
+      const main = document.querySelector('main');
+      main.insertBefore(btn, main.firstChild);
+    }
+    btn.style.display = 'inline-block';
+  } else if (btn) {
+    btn.style.display = 'none';
+  }
 }
 
 function focusOnItem(key, category) {
