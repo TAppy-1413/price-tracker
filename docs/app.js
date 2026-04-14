@@ -362,20 +362,21 @@ function buildLineChart(canvasId, rows, keys, dateKey = 'date', unitMultiplier =
 // Tab renderers
 // -------------------------------------------------------------
 function renderMaterials() {
-  const keys = [...STATE.filters.materials];
+  const allKeys = ['ss400', 'aluminum_casting', 'iron_casting', 'sus303', 'a5052'];
+  const keys = applyFocus([...STATE.filters.materials]);
   const mult = STATE.materialUnit === 't' ? 1000 : 1;
   const unitLabel = STATE.materialUnit === 't' ? '円/t' : '円/kg';
   document.querySelector('#tab-materials h2').textContent = `材料価格 (${unitLabel})`;
   buildLineChart('chart-materials', STATE.metals, keys, 'date', mult);
-  renderCards('materials-cards', STATE.metals, ['ss400', 'aluminum_casting', 'iron_casting', 'sus303', 'a5052'], 'date', mult);
+  renderCards('materials-cards', STATE.metals, applyFocus(allKeys), 'date', mult);
   renderMaterialFilter();
   renderUnitToggle();
 }
 
 function renderWage() {
-  const keys = [...STATE.filters.wage];
+  const keys = applyFocus([...STATE.filters.wage]);
   buildLineChart('chart-wage', STATE.wage, keys, 'year');
-  renderCards('wage-cards', STATE.wage, ['tochigi', 'tokyo', 'nationwide'], 'year');
+  renderCards('wage-cards', STATE.wage, applyFocus(['tochigi', 'tokyo', 'nationwide']), 'year');
   renderWageFilter();
 }
 
@@ -384,8 +385,9 @@ function renderElectricity() {
   const japiaElec = STATE.japia?.elec || [];
   if (japiaElec.length) {
     const companies = ['tepco', 'chubu', 'kansai', 'hokkaido', 'tohoku', 'hokuriku', 'chugoku', 'shikoku', 'kyushu', 'okinawa'];
-    buildLineChart('chart-electricity', japiaElec, companies);
-    renderCards('electricity-cards', japiaElec, companies);
+    const keys = applyFocus(companies);
+    buildLineChart('chart-electricity', japiaElec, keys);
+    renderCards('electricity-cards', japiaElec, keys);
     // 2つ目のグラフは非表示 (JAPIAに全部含まれる)
     const secondCanvas = document.getElementById('chart-electricity-region');
     if (secondCanvas) secondCanvas.parentElement.parentElement.style.display = 'none';
@@ -396,8 +398,9 @@ function renderElectricity() {
 }
 
 function renderFreight() {
-  buildLineChart('chart-freight', STATE.sppi, ['road_freight', 'ocean_freight', 'air_freight', 'coastal_freight']);
-  renderCards('freight-cards', STATE.sppi, ['road_freight', 'ocean_freight', 'air_freight', 'coastal_freight']);
+  const keys = applyFocus(['road_freight', 'ocean_freight', 'air_freight', 'coastal_freight']);
+  buildLineChart('chart-freight', STATE.sppi, keys);
+  renderCards('freight-cards', STATE.sppi, keys);
 }
 
 function renderFuel() {
@@ -411,8 +414,9 @@ function renderFuel() {
       }
     });
   }
-  buildLineChart('chart-fuel', STATE.metals, ['regular', 'highoctane', 'diesel', 'crude_oil']);
-  renderCards('fuel-cards', STATE.metals, ['regular', 'highoctane', 'diesel', 'crude_oil']);
+  const keys = applyFocus(['regular', 'highoctane', 'diesel', 'crude_oil']);
+  buildLineChart('chart-fuel', STATE.metals, keys);
+  renderCards('fuel-cards', STATE.metals, keys);
 }
 
 function renderSummary() {
@@ -498,7 +502,7 @@ function renderSummary() {
     const fcPctStr = fcPct != null ? `(${fcPct >= 0 ? '+' : ''}${fcPct.toFixed(1)}%)` : '';
     const fcClass = fcPct != null ? (fcPct >= 0 ? 'change-up' : 'change-down') : '';
 
-    html += `<tr>
+    html += `<tr class="summary-row" data-key="${it.key}" data-category="${it.category}" style="cursor:pointer">
       <td>${it.category}</td><td><strong>${LABELS[it.key]}</strong></td>
       <td class="num">${fmt(baseVal)}</td><td class="num">${fmt(compVal)}</td>
       <td class="num ${pctClass}">${pctStr}</td>
@@ -506,8 +510,17 @@ function renderSummary() {
       <td>${UNITS[it.key] || ''}</td></tr>`;
   }
   html += '</tbody></table>';
-  html += '<p style="font-size:11px;color:#999;margin-top:12px">※ 材料価格は国際商品価格から推定した参考値です。3年後予測は直近5年の線形回帰に基づく推定値です。</p>';
+  html += '<p style="font-size:11px;color:#999;margin-top:12px">※ 行をクリックするとそのグラフが表示されます。3年後予測は直近5年の線形回帰に基づく推定値です。</p>';
   container.innerHTML = html;
+
+  // 行クリック → 該当タブに移動して該当系列だけ表示
+  container.querySelectorAll('.summary-row').forEach(tr => {
+    tr.addEventListener('click', () => {
+      const key = tr.dataset.key;
+      const category = tr.dataset.category;
+      focusOnItem(key, category);
+    });
+  });
 
   document.getElementById('summary-base-year').addEventListener('change', e => {
     STATE.summaryBaseYear = e.target.value;
@@ -645,6 +658,10 @@ function getTabDataRange(name) {
 }
 
 function switchTab(name) {
+  // タブボタン直接クリック時はフォーカス解除 (focusOnItem経由ではない場合)
+  if (!STATE._focusing) STATE.focusKey = null;
+  STATE._focusing = false;
+
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === `tab-${name}`));
 
@@ -683,6 +700,29 @@ function switchTab(name) {
   });
 
   renderActiveTab();
+}
+
+function focusOnItem(key, category) {
+  const tabMap = {
+    '材料': 'materials',
+    '燃料': 'fuel',
+    '運賃': 'freight',
+    '電気代': 'electricity',
+    '最低賃金': 'labor',
+  };
+  const tabName = tabMap[category];
+  if (!tabName) return;
+  STATE.focusKey = key;
+  STATE._focusing = true;
+  switchTab(tabName);
+}
+
+// renderActiveTab後にフォーカスをクリア
+function applyFocus(allKeys) {
+  if (STATE.focusKey && allKeys.includes(STATE.focusKey)) {
+    return [STATE.focusKey];
+  }
+  return allKeys;
 }
 
 function clearPresetButtons() {

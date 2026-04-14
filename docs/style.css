@@ -375,6 +375,11 @@ main {
   background: var(--bg);
 }
 
+#summary-table tr.summary-row:hover {
+  background: #fff5f3;
+  cursor: pointer;
+}
+
 #summary-table td.num {
   text-align: right;
   font-variant-numeric: tabular-nums;
