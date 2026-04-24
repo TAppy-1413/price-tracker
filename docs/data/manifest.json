@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-17 11:24 JST",
+  "generated_at": "2026-04-24 11:27 JST",
   "sources": {
     "diesel": {
       "rows": 0,
@@ -42,16 +42,16 @@
       "latest": "2026-03-01"
     },
     "metals": {
-      "rows": 331,
-      "latest": "2026-04-13"
+      "rows": 332,
+      "latest": "2026-04-20"
     },
     "min_wage": {
       "rows": 26,
       "latest": "2025"
     },
     "sppi": {
-      "rows": 314,
-      "latest": "2026-02-01"
+      "rows": 315,
+      "latest": "2026-03-01"
     }
   }
 }
