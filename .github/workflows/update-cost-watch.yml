@@ -1,9 +1,9 @@
 name: Update Cost-Watch Data
 
 on:
-  # 毎週水曜 09:00 UTC = 18:00 JST (per spec)
+  # 毎週月曜 00:00 UTC = 09:00 JST (Slack配信に合わせて月曜朝に統一)
   schedule:
-    - cron: '0 9 * * 3'
+    - cron: '0 0 * * 1'
   workflow_dispatch:
 
 jobs:
@@ -79,3 +79,13 @@ jobs:
             git commit -m "chore(cost-watch): weekly update $(date -u +%Y-%m-%d)"
             git push
           fi
+
+      # ------------------------------------------------------------
+      # Slack notification — fires AFTER data update, so the message
+      # reflects the latest snapshot. Failure here never breaks the
+      # pipeline (notify_slack.py always exits 0).
+      # ------------------------------------------------------------
+      - name: Slack notification (#価格チャート141)
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: python scripts/cost_watch/notify_slack.py fuel
