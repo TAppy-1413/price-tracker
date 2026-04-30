@@ -1,7 +1,7 @@
 {
   "category": "electricity",
   "category_name_ja": "電気代",
-  "last_updated": "2026-04-30T04:49:16Z",
+  "last_updated": "2026-04-30T04:54:22Z",
   "items": [
     {
       "id": "elec_tepco",
@@ -20,7 +20,7 @@
           "name": "JAPIA",
           "current": 18.61,
           "url": "https://www.japia.or.jp/",
-          "fetched_at": "2026-04-30T04:49:16Z",
+          "fetched_at": "2026-04-30T04:54:22Z",
           "status": "ok",
           "history": [
             {
@@ -621,7 +621,7 @@
           "name": "JAPIA",
           "current": 17.1,
           "url": "https://www.japia.or.jp/",
-          "fetched_at": "2026-04-30T04:49:16Z",
+          "fetched_at": "2026-04-30T04:54:22Z",
           "status": "ok",
           "history": [
             {
@@ -1374,7 +1374,7 @@
           "name": "JAPIA",
           "current": 18.68,
           "url": "https://www.japia.or.jp/",
-          "fetched_at": "2026-04-30T04:49:16Z",
+          "fetched_at": "2026-04-30T04:54:22Z",
           "status": "ok",
           "history": [
             {

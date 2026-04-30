@@ -1,7 +1,7 @@
 {
   "category": "materials",
   "category_name_ja": "材料費",
-  "last_updated": "2026-04-30T04:49:16Z",
+  "last_updated": "2026-04-30T04:54:22Z",
   "items": [
     {
       "id": "steel_hot_rolled",
@@ -20,7 +20,7 @@
           "name": "JAPIA",
           "current": 99.0,
           "url": "https://www.japia.or.jp/?topics=press-release",
-          "fetched_at": "2026-04-30T04:49:15Z",
+          "fetched_at": "2026-04-30T04:54:22Z",
           "status": "ok",
           "history": [
             {
@@ -2553,7 +2553,7 @@
           "name": "JAPIA",
           "current": 634.175,
           "url": "https://www.japia.or.jp/?topics=press-release",
-          "fetched_at": "2026-04-30T04:49:15Z",
+          "fetched_at": "2026-04-30T04:54:22Z",
           "status": "ok",
           "history": [
             {
@@ -3295,7 +3295,7 @@
           "name": "World Bank",
           "current": 569.9,
           "url": "https://www.worldbank.org/en/research/commodity-markets",
-          "fetched_at": "2026-04-30T04:49:15Z",
+          "fetched_at": "2026-04-30T04:54:22Z",
           "status": "ok",
           "history": [
             {
@@ -4652,7 +4652,7 @@
           "name": "JAPIA",
           "current": 2089.5,
           "url": "https://www.japia.or.jp/?topics=press-release",
-          "fetched_at": "2026-04-30T04:49:15Z",
+          "fetched_at": "2026-04-30T04:54:22Z",
           "status": "ok",
           "history": [
             {
@@ -5826,7 +5826,7 @@
           "name": "World Bank",
           "current": 2120.95,
           "url": "https://www.worldbank.org/en/research/commodity-markets",
-          "fetched_at": "2026-04-30T04:49:15Z",
+          "fetched_at": "2026-04-30T04:54:22Z",
           "status": "ok",
           "history": [
             {
@@ -7183,7 +7183,7 @@
           "name": "World Bank",
           "current": 371.98,
           "url": "https://www.worldbank.org/en/research/commodity-markets",
-          "fetched_at": "2026-04-30T04:49:15Z",
+          "fetched_at": "2026-04-30T04:54:22Z",
           "status": "ok",
           "history": [
             {

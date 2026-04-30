@@ -1,7 +1,7 @@
 {
   "category": "wages",
   "category_name_ja": "人件費",
-  "last_updated": "2026-04-30T04:49:16Z",
+  "last_updated": "2026-04-30T04:54:22Z",
   "items": [
     {
       "id": "min_wage_tochigi",
@@ -20,7 +20,7 @@
           "name": "JAPIA",
           "current": 1068.0,
           "url": "https://www.japia.or.jp/",
-          "fetched_at": "2026-04-30T04:49:15Z",
+          "fetched_at": "2026-04-30T04:54:22Z",
           "status": "ok",
           "history": [
             {
@@ -130,7 +130,7 @@
           "name": "厚労省",
           "current": 1038.0,
           "url": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/roudoukijun/minimumichiran/",
-          "fetched_at": "2026-04-30T04:49:15Z",
+          "fetched_at": "2026-04-30T04:54:22Z",
           "status": "ok",
           "history": [
             {
@@ -263,7 +263,7 @@
           "name": "JAPIA",
           "current": 1121.0,
           "url": "https://www.japia.or.jp/",
-          "fetched_at": "2026-04-30T04:49:15Z",
+          "fetched_at": "2026-04-30T04:54:22Z",
           "status": "ok",
           "history": [
             {
@@ -373,7 +373,7 @@
           "name": "厚労省",
           "current": 1055.0,
           "url": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/roudoukijun/minimumichiran/",
-          "fetched_at": "2026-04-30T04:49:15Z",
+          "fetched_at": "2026-04-30T04:54:22Z",
           "status": "ok",
           "history": [
             {

@@ -1,7 +1,7 @@
 {
   "category": "logistics",
   "category_name_ja": "物流費",
-  "last_updated": "2026-04-30T04:49:16Z",
+  "last_updated": "2026-04-30T04:54:22Z",
   "items": [
     {
       "id": "road_freight_index",
@@ -20,7 +20,7 @@
           "name": "日銀SPPI",
           "current": 109.8,
           "url": "https://www.boj.or.jp/statistics/pi/sppi_2020/index.htm",
-          "fetched_at": "2026-04-30T04:49:16Z",
+          "fetched_at": "2026-04-30T04:54:22Z",
           "status": "ok",
           "history": [
             {
@@ -1309,7 +1309,7 @@
           "name": "JAPIA",
           "current": 153.83,
           "url": "https://www.japia.or.jp/",
-          "fetched_at": "2026-04-30T04:49:16Z",
+          "fetched_at": "2026-04-30T04:54:22Z",
           "status": "ok",
           "history": [
             {
@@ -3050,7 +3050,7 @@
           "name": "JAPIA",
           "current": 11452.61,
           "url": "https://www.japia.or.jp/",
-          "fetched_at": "2026-04-30T04:49:16Z",
+          "fetched_at": "2026-04-30T04:54:22Z",
           "status": "ok",
           "history": [
             {
