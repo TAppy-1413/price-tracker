@@ -4,3 +4,6 @@ __pycache__/
 .DS_Store
 *.log
 .env
+
+# cost-watch download cache (regenerable XLS/HTML downloads)
+data/cost-watch/_cache/

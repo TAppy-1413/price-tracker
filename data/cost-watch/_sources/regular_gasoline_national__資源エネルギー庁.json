@@ -1,0 +1,10 @@
+{
+  "item_id": "regular_gasoline_national",
+  "source_name": "資源エネルギー庁",
+  "source_url": "https://www.enecho.meti.go.jp/statistics/petroleum_and_lpgas/pl007/results.html",
+  "status": "failed",
+  "current": null,
+  "history": [],
+  "fetched_at": "2026-04-30T00:03:30Z",
+  "error": "unable to reach https://www.enecho.meti.go.jp/statistics/petroleum_and_lpgas/pl007/results.html: all 2 attempts failed: HTTPSConnectionPool(host='www.enecho.meti.go.jp', port=443): Read timed out. (read timeout=60)"
+}

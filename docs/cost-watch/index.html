@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>コストウォッチ — マルチソース価格モニター</title>
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <h1>🔍 コストウォッチ</h1>
+    <p class="subtitle">複数ソースから並列取得した価格データ ― 社員自身の判断材料用</p>
+  </div>
+  <div class="header-right">
+    <a href="../" class="back-btn">← 既存ダッシュボードへ</a>
+    <div class="meta">
+      <div id="last-updated">データ取得中…</div>
+    </div>
+  </div>
+</header>
+
+<section class="cost-watch-philosophy">
+  <p>
+    本ページは <strong>単一の正解値を押し付けない</strong> 設計です。
+    各指標について最大3ソースの値を並列表示し、社員自身が見比べて判断できる情報を提供します。
+  </p>
+  <p class="legend">
+    🟢 整合 (乖離&lt;2%) ／ 🟡 要確認 (2-5%) ／ 🔴 ソース間乖離 (≥5%) ／ ⚪ 単一ソース
+  </p>
+</section>
+
+<main id="cards-grid" class="cards-grid">
+  <div class="loading">データを読み込んでおります…</div>
+</main>
+
+<footer>
+  <p>
+    データソース複数並列・社員判断材料用 ／ 毎週月曜 09:00 JST 自動更新（GitHub Actions）<br>
+    <span style="color:#999">スクレイピング対象サイトの利用規約に従い、社内利用に限定</span>
+  </p>
+</footer>
+
+<script src="js/dashboard.js"></script>
+</body>
+</html>

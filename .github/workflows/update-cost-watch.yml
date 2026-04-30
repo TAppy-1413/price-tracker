@@ -27,7 +27,10 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run consistency tests
-        run: python -m unittest scripts/cost_watch/test_consistency.py -v
+        # cd into the package dir so sibling 'consistency' module resolves
+        run: |
+          cd scripts/cost_watch
+          python -m unittest test_consistency.py -v
 
       # ------------------------------------------------------------
       # Fuel category — 3 sources, each isolated so one failure does

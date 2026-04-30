@@ -1,0 +1,234 @@
+/* cost-watch specific styles. Inherits design tokens (--bg, --accent etc.) from ../style.css */
+
+.cost-watch-philosophy {
+  background: var(--card);
+  margin: 16px 32px;
+  padding: 16px 24px;
+  border-radius: 8px;
+  border-left: 4px solid var(--accent);
+  box-shadow: var(--shadow);
+  font-size: 13px;
+  color: var(--ink-2);
+  line-height: 1.7;
+}
+
+.cost-watch-philosophy strong {
+  color: var(--accent);
+}
+
+.cost-watch-philosophy .legend {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--ink-2);
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+  padding: 16px 32px;
+}
+
+.kpi-card {
+  background: var(--card);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  padding: 20px;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+}
+
+.kpi-card.placeholder {
+  background: #fafaf6;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.kpi-card.placeholder:hover {
+  transform: none;
+  box-shadow: var(--shadow);
+}
+
+.kpi-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 8px;
+}
+
+.kpi-card-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.kpi-card-arrow {
+  color: var(--accent);
+  font-size: 20px;
+}
+
+.kpi-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 0;
+  border-bottom: 1px dotted var(--border);
+}
+
+.kpi-item:last-child {
+  border-bottom: none;
+}
+
+.kpi-item-name {
+  font-size: 13px;
+  color: var(--ink-2);
+}
+
+.kpi-item-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.kpi-item-unit {
+  font-size: 14px;
+  color: var(--ink-2);
+  font-weight: 400;
+  margin-left: 4px;
+}
+
+.kpi-item-flag {
+  font-size: 12px;
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+  margin-top: 2px;
+  width: fit-content;
+}
+
+.kpi-item-flag.consistent { background: #d4edda; color: #155724; }
+.kpi-item-flag.warning    { background: #fff3cd; color: #856404; }
+.kpi-item-flag.divergent  { background: #f8d7da; color: #721c24; }
+.kpi-item-flag.single     { background: #e9ecef; color: #495057; }
+
+.kpi-item-comparisons {
+  display: flex;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.cmp-up   { color: #c8102e; font-weight: 600; }
+.cmp-down { color: #1a6b3c; font-weight: 600; }
+.cmp-flat { color: #6c7a89; }
+
+.loading {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 48px;
+  color: var(--ink-2);
+}
+
+/* ----- Category detail page ----- */
+
+.indicator-block {
+  background: var(--card);
+  margin: 16px 32px;
+  padding: 24px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.indicator-block h2 {
+  font-size: 18px;
+  color: var(--accent);
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 8px;
+  margin-bottom: 16px;
+}
+
+.indicator-summary {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: var(--ink-2);
+}
+
+.indicator-summary .big-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.source-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.source-table th, .source-table td {
+  padding: 10px 12px;
+  text-align: right;
+  border-bottom: 1px solid var(--border);
+  font-variant-numeric: tabular-nums;
+}
+
+.source-table th {
+  background: var(--bg);
+  font-weight: 600;
+  color: var(--ink);
+  font-variant-numeric: normal;
+}
+
+.source-table th:first-child,
+.source-table td:first-child {
+  text-align: left;
+}
+
+.source-table td.status-ok      { color: #1a6b3c; font-weight: 600; }
+.source-table td.status-stale   { color: #856404; }
+.source-table td.status-failed  { color: #c8102e; }
+
+.chart-wrapper {
+  position: relative;
+  height: 320px;
+  margin-top: 16px;
+}
+
+@media (max-width: 720px) {
+  .cards-grid {
+    padding: 16px;
+    grid-template-columns: 1fr;
+  }
+  .indicator-block {
+    margin: 16px;
+    padding: 16px;
+  }
+  .source-table {
+    font-size: 12px;
+  }
+  .source-table th, .source-table td {
+    padding: 6px 8px;
+  }
+  .chart-wrapper {
+    height: 240px;
+  }
+}

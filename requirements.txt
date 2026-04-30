@@ -2,3 +2,5 @@ pandas>=2.0
 requests>=2.31
 openpyxl>=3.1
 yfinance>=0.2.40
+# cost-watch: read legacy .xls (Excel 97-2003 binary)
+xlrd<2.0
