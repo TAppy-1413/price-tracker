@@ -48,13 +48,30 @@ jobs:
         run: python scripts/scrapers/fuel/enecho.py
         continue-on-error: true
 
-      - name: Merge fuel category
-        run: python scripts/cost_watch/merge.py fuel
+      # ------------------------------------------------------------
+      # Materials / Wages / Logistics / Electricity
+      # All four wrap existing repo CSVs (japia_*, metals, sppi, min_wage)
+      # via the shared csv adapter. continue-on-error keeps each category
+      # independent.
+      # ------------------------------------------------------------
+      - name: Materials — JAPIA + World Bank (CSV adapter)
+        run: python scripts/scrapers/materials/csv_sources.py
+        continue-on-error: true
 
-      # ------------------------------------------------------------
-      # Future categories: materials / wages / logistics / electricity
-      # will be added here once their scrapers are implemented.
-      # ------------------------------------------------------------
+      - name: Wages — 厚労省 + JAPIA (CSV adapter)
+        run: python scripts/scrapers/wages/csv_sources.py
+        continue-on-error: true
+
+      - name: Logistics — 日銀SPPI + JAPIA (CSV adapter)
+        run: python scripts/scrapers/logistics/csv_sources.py
+        continue-on-error: true
+
+      - name: Electricity — JAPIA 電力会社別 (CSV adapter)
+        run: python scripts/scrapers/electricity/csv_sources.py
+        continue-on-error: true
+
+      - name: Merge all categories
+        run: python scripts/cost_watch/merge.py fuel materials wages logistics electricity
 
       - name: Show resulting JSON summary
         run: |
@@ -91,4 +108,4 @@ jobs:
       - name: Slack notification (#価格チャート141)
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        run: python scripts/cost_watch/notify_slack.py fuel
+        run: python scripts/cost_watch/notify_slack.py fuel materials wages logistics electricity
