@@ -139,6 +139,19 @@ def merge_category(
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(out, f, ensure_ascii=False, indent=2)
+
+    # Mirror to docs/data/cost-watch/ for GitHub Pages frontend consumption.
+    docs_path = (
+        SCRIPT_DIR.parent.parent
+        / "docs"
+        / "data"
+        / "cost-watch"
+        / output_path.name
+    )
+    docs_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(docs_path, "w", encoding="utf-8") as f:
+        json.dump(out, f, ensure_ascii=False, indent=2)
+
     return out
 
 
