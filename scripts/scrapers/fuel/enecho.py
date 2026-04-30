@@ -53,6 +53,18 @@ from oil_info import (  # noqa: E402
 SOURCE_NAME = "資源エネルギー庁"
 RESULTS_PAGE = "https://www.enecho.meti.go.jp/statistics/petroleum_and_lpgas/pl007/results.html"
 
+# meti.go.jp times out aggressively for unfamiliar UAs. Use a browser-like UA.
+ENECHO_HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
+    ),
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "ja,en-US;q=0.9,en;q=0.8",
+}
+ENECHO_TIMEOUT_SEC = 60
+ENECHO_MAX_ATTEMPTS = 2
+
 # Item registry: (item_id, sheet, row)
 ITEMS = [
     ("regular_gasoline_national", SHEET_REGULAR, ROW_NATIONAL),
@@ -61,24 +73,25 @@ ITEMS = [
 ]
 
 
+def _fetch_with_retry(url: str, want_bytes: bool = False):
+    last_err: Optional[Exception] = None
+    for attempt in range(ENECHO_MAX_ATTEMPTS):
+        try:
+            r = requests.get(url, headers=ENECHO_HEADERS, timeout=ENECHO_TIMEOUT_SEC)
+            r.raise_for_status()
+            return r.content if want_bytes else r.content.decode(r.encoding or "utf-8", errors="replace")
+        except Exception as e:
+            last_err = e
+            print(f"[enecho] attempt {attempt+1}/{ENECHO_MAX_ATTEMPTS} failed for {url}: {e}", file=sys.stderr)
+    raise RuntimeError(f"all {ENECHO_MAX_ATTEMPTS} attempts failed: {last_err}")
+
+
 def _fetch_text(url: str) -> str:
-    r = requests.get(
-        url,
-        headers={"User-Agent": USER_AGENT},
-        timeout=REQUEST_TIMEOUT_SEC,
-    )
-    r.raise_for_status()
-    return r.content.decode(r.encoding or "utf-8", errors="replace")
+    return _fetch_with_retry(url, want_bytes=False)
 
 
 def _fetch_bytes(url: str) -> bytes:
-    r = requests.get(
-        url,
-        headers={"User-Agent": USER_AGENT},
-        timeout=REQUEST_TIMEOUT_SEC,
-    )
-    r.raise_for_status()
-    return r.content
+    return _fetch_with_retry(url, want_bytes=True)
 
 
 def _extract_xls_links(html: str, base_url: str) -> list[str]:
