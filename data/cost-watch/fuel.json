@@ -1,7 +1,7 @@
 {
   "category": "fuel",
   "category_name_ja": "燃料",
-  "last_updated": "2026-04-30T00:24:51Z",
+  "last_updated": "2026-04-30T04:54:22Z",
   "items": [
     {
       "id": "regular_gasoline_national",
@@ -9,8 +9,8 @@
       "unit": "円/L",
       "display_mode": "single",
       "value_range": {
-        "min": 155.8,
-        "max": 155.8
+        "min": 156.6,
+        "max": 156.6
       },
       "sources_count": 1,
       "consistency_flag": "single",
@@ -18,9 +18,9 @@
       "sources": [
         {
           "name": "e燃費",
-          "current": 155.8,
+          "current": 156.6,
           "url": "https://e-nenpi.com/gs/price_graph/6/1/0/",
-          "fetched_at": "2026-04-30T00:24:51Z",
+          "fetched_at": "2026-04-30T04:52:13Z",
           "status": "ok",
           "history": [
             {
@@ -261,24 +261,24 @@
             },
             {
               "date": "2026-04-01",
-              "value": 154.8
+              "value": 154.9
             },
             {
               "date": "2026-04-29",
-              "value": 155.8
+              "value": 156.6
             }
           ],
           "comparisons": {
-            "wow_pct": 0.65,
-            "mom_pct": -1.02,
-            "yoy_pct": -9.73
+            "wow_pct": 1.1,
+            "mom_pct": -0.51,
+            "yoy_pct": -9.27
           }
         },
         {
           "name": "石油情報センター",
           "current": 157.6,
           "url": "https://oil-info.ieej.or.jp/price/data/SekiyuWeekly.xls",
-          "fetched_at": "2026-04-29T23:51:00Z",
+          "fetched_at": "2026-04-30T04:52:12Z",
           "status": "stale",
           "history": [
             {
@@ -495,13 +495,13 @@
             "mom_pct": 9.83,
             "yoy_pct": null
           },
-          "error": "latest data point 2012-03-26 is 5147 days old (>14)"
+          "error": "latest data point 2012-03-26 is 5148 days old (>14)"
         },
         {
           "name": "資源エネルギー庁",
           "current": null,
           "url": "https://www.enecho.meti.go.jp/statistics/petroleum_and_lpgas/pl007/results.html",
-          "fetched_at": "2026-04-29T23:51:10Z",
+          "fetched_at": "2026-04-30T04:52:21Z",
           "status": "failed",
           "history": [],
           "comparisons": {
@@ -509,7 +509,7 @@
             "mom_pct": null,
             "yoy_pct": null
           },
-          "error": "unable to reach https://www.enecho.meti.go.jp/statistics/petroleum_and_lpgas/pl007/results.html: HTTPSConnectionPool(host='www.enecho.meti.go.jp', port=443): Read timed out. (read timeout=30)"
+          "error": "unable to reach https://www.enecho.meti.go.jp/statistics/petroleum_and_lpgas/pl007/results.html: all 2 attempts failed: HTTPSConnectionPool(host='www.enecho.meti.go.jp', port=443): Read timed out. (read timeout=60)"
         }
       ]
     },
@@ -519,8 +519,8 @@
       "unit": "円/L",
       "display_mode": "single",
       "value_range": {
-        "min": 144.8,
-        "max": 144.8
+        "min": 144.6,
+        "max": 144.6
       },
       "sources_count": 1,
       "consistency_flag": "single",
@@ -528,9 +528,9 @@
       "sources": [
         {
           "name": "e燃費",
-          "current": 144.8,
+          "current": 144.6,
           "url": "https://e-nenpi.com/gs/price_graph/6/3/0/",
-          "fetched_at": "2026-04-30T00:24:51Z",
+          "fetched_at": "2026-04-30T04:52:13Z",
           "status": "ok",
           "history": [
             {
@@ -775,20 +775,20 @@
             },
             {
               "date": "2026-04-29",
-              "value": 144.8
+              "value": 144.6
             }
           ],
           "comparisons": {
-            "wow_pct": 1.76,
-            "mom_pct": 1.05,
-            "yoy_pct": -2.62
+            "wow_pct": 1.62,
+            "mom_pct": 0.91,
+            "yoy_pct": -2.76
           }
         },
         {
           "name": "石油情報センター",
           "current": 136.6,
           "url": "https://oil-info.ieej.or.jp/price/data/SekiyuWeekly.xls",
-          "fetched_at": "2026-04-29T23:51:00Z",
+          "fetched_at": "2026-04-30T04:52:12Z",
           "status": "stale",
           "history": [
             {
@@ -1005,13 +1005,13 @@
             "mom_pct": 9.54,
             "yoy_pct": null
           },
-          "error": "latest data point 2012-03-26 is 5147 days old (>14)"
+          "error": "latest data point 2012-03-26 is 5148 days old (>14)"
         },
         {
           "name": "資源エネルギー庁",
           "current": null,
           "url": "https://www.enecho.meti.go.jp/statistics/petroleum_and_lpgas/pl007/results.html",
-          "fetched_at": "2026-04-29T23:51:10Z",
+          "fetched_at": "2026-04-30T04:52:21Z",
           "status": "failed",
           "history": [],
           "comparisons": {
@@ -1019,7 +1019,7 @@
             "mom_pct": null,
             "yoy_pct": null
           },
-          "error": "unable to reach https://www.enecho.meti.go.jp/statistics/petroleum_and_lpgas/pl007/results.html: HTTPSConnectionPool(host='www.enecho.meti.go.jp', port=443): Read timed out. (read timeout=30)"
+          "error": "unable to reach https://www.enecho.meti.go.jp/statistics/petroleum_and_lpgas/pl007/results.html: all 2 attempts failed: HTTPSConnectionPool(host='www.enecho.meti.go.jp', port=443): Read timed out. (read timeout=60)"
         }
       ]
     },
@@ -1037,7 +1037,7 @@
           "name": "石油情報センター",
           "current": 157.4,
           "url": "https://oil-info.ieej.or.jp/price/data/SekiyuWeekly.xls",
-          "fetched_at": "2026-04-29T23:51:00Z",
+          "fetched_at": "2026-04-30T04:52:12Z",
           "status": "stale",
           "history": [
             {
@@ -1254,13 +1254,13 @@
             "mom_pct": 10.07,
             "yoy_pct": null
           },
-          "error": "latest data point 2012-03-26 is 5147 days old (>14)"
+          "error": "latest data point 2012-03-26 is 5148 days old (>14)"
         },
         {
           "name": "資源エネルギー庁",
           "current": null,
           "url": "https://www.enecho.meti.go.jp/statistics/petroleum_and_lpgas/pl007/results.html",
-          "fetched_at": "2026-04-29T23:51:10Z",
+          "fetched_at": "2026-04-30T04:52:21Z",
           "status": "failed",
           "history": [],
           "comparisons": {
@@ -1268,7 +1268,7 @@
             "mom_pct": null,
             "yoy_pct": null
           },
-          "error": "unable to reach https://www.enecho.meti.go.jp/statistics/petroleum_and_lpgas/pl007/results.html: HTTPSConnectionPool(host='www.enecho.meti.go.jp', port=443): Read timed out. (read timeout=30)"
+          "error": "unable to reach https://www.enecho.meti.go.jp/statistics/petroleum_and_lpgas/pl007/results.html: all 2 attempts failed: HTTPSConnectionPool(host='www.enecho.meti.go.jp', port=443): Read timed out. (read timeout=60)"
         }
       ]
     }

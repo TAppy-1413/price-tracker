@@ -22,21 +22,29 @@ from consistency import calc_comparisons, evaluate_consistency  # noqa: E402
 # Item registry (ordering controls UI display)
 CATEGORY_ITEMS = {
     "fuel": [
-        {
-            "id": "regular_gasoline_national",
-            "name_ja": "レギュラーガソリン（全国平均）",
-            "unit": "円/L",
-        },
-        {
-            "id": "diesel_national",
-            "name_ja": "軽油（全国平均）",
-            "unit": "円/L",
-        },
-        {
-            "id": "regular_gasoline_kanto",
-            "name_ja": "レギュラーガソリン（関東平均）",
-            "unit": "円/L",
-        },
+        {"id": "regular_gasoline_national", "name_ja": "レギュラーガソリン（全国平均）", "unit": "円/L"},
+        {"id": "diesel_national",           "name_ja": "軽油（全国平均）",                "unit": "円/L"},
+        {"id": "regular_gasoline_kanto",    "name_ja": "レギュラーガソリン（関東平均）", "unit": "円/L"},
+    ],
+    "materials": [
+        {"id": "steel_hot_rolled",  "name_ja": "鋼材（熱延鋼板）",          "unit": "円/kg"},
+        {"id": "aluminum_a5052",    "name_ja": "アルミ地金",                "unit": "円/kg"},
+        {"id": "copper",            "name_ja": "銅",                        "unit": "円/kg"},
+        {"id": "nickel_proxy",      "name_ja": "ニッケル（チタン代理指標）", "unit": "円/kg"},
+    ],
+    "wages": [
+        {"id": "min_wage_tochigi",    "name_ja": "栃木県最低賃金",   "unit": "円/時"},
+        {"id": "min_wage_nationwide", "name_ja": "全国加重平均賃金", "unit": "円/時"},
+    ],
+    "logistics": [
+        {"id": "road_freight_index", "name_ja": "トラック運賃指数", "unit": "指数(2020=100)"},
+        {"id": "diesel_truck",       "name_ja": "トラック軽油価格", "unit": "円/L"},
+        {"id": "truck_surcharge",    "name_ja": "燃料サーチャージ", "unit": "円/車"},
+    ],
+    "electricity": [
+        {"id": "elec_tepco",  "name_ja": "東京電力EP",  "unit": "円/kWh"},
+        {"id": "elec_chubu",  "name_ja": "中部電力",    "unit": "円/kWh"},
+        {"id": "elec_kansai", "name_ja": "関西電力",    "unit": "円/kWh"},
     ],
 }
 

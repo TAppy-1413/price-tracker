@@ -3,11 +3,11 @@
 // =============================================================
 
 const CATEGORIES = [
-  { id: "fuel",        emoji: "⛽", label: "燃料",     status: "active"      },
-  { id: "materials",   emoji: "🔩", label: "材料費",   status: "coming-soon" },
-  { id: "wages",       emoji: "👷", label: "人件費",   status: "coming-soon" },
-  { id: "logistics",   emoji: "🚚", label: "物流費",   status: "coming-soon" },
-  { id: "electricity", emoji: "⚡", label: "電気代",   status: "coming-soon" },
+  { id: "fuel",        emoji: "⛽", label: "燃料",     status: "active" },
+  { id: "materials",   emoji: "🔩", label: "材料費",   status: "active" },
+  { id: "wages",       emoji: "👷", label: "人件費",   status: "active" },
+  { id: "logistics",   emoji: "🚚", label: "物流費",   status: "active" },
+  { id: "electricity", emoji: "⚡", label: "電気代",   status: "active" },
 ];
 
 const FLAG_LABEL = {
