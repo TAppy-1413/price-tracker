@@ -1,7 +1,7 @@
 {
   "category": "materials",
   "category_name_ja": "材料費",
-  "last_updated": "2026-04-30T23:20:24Z",
+  "last_updated": "2026-05-04T03:40:14Z",
   "items": [
     {
       "id": "steel_hot_rolled",
@@ -20,7 +20,7 @@
           "name": "JAPIA",
           "current": 99.0,
           "url": "https://www.japia.or.jp/?topics=press-release",
-          "fetched_at": "2026-04-30T23:20:24Z",
+          "fetched_at": "2026-05-04T03:40:14Z",
           "status": "ok",
           "history": [
             {
@@ -2542,18 +2542,18 @@
       "unit": "円/kg",
       "display_mode": "range",
       "value_range": {
-        "min": 569.9,
+        "min": 554.72,
         "max": 634.175
       },
       "sources_count": 2,
       "consistency_flag": "divergent",
-      "max_deviation_pct": 10.68,
+      "max_deviation_pct": 13.37,
       "sources": [
         {
           "name": "JAPIA",
           "current": 634.175,
           "url": "https://www.japia.or.jp/?topics=press-release",
-          "fetched_at": "2026-04-30T23:20:24Z",
+          "fetched_at": "2026-05-04T03:40:14Z",
           "status": "ok",
           "history": [
             {
@@ -3293,9 +3293,9 @@
         },
         {
           "name": "World Bank",
-          "current": 569.9,
+          "current": 554.72,
           "url": "https://www.worldbank.org/en/research/commodity-markets",
-          "fetched_at": "2026-04-30T23:20:24Z",
+          "fetched_at": "2026-05-04T03:40:14Z",
           "status": "ok",
           "history": [
             {
@@ -4624,13 +4624,17 @@
             },
             {
               "date": "2026-04-20",
-              "value": 569.9
+              "value": 574.93
+            },
+            {
+              "date": "2026-04-27",
+              "value": 554.72
             }
           ],
           "comparisons": {
-            "wow_pct": -0.1,
-            "mom_pct": 15.37,
-            "yoy_pct": 68.87
+            "wow_pct": -3.52,
+            "mom_pct": 8.57,
+            "yoy_pct": 64.37
           }
         }
       ]
@@ -4642,17 +4646,17 @@
       "display_mode": "range",
       "value_range": {
         "min": 2089.5,
-        "max": 2120.95
+        "max": 2129.82
       },
       "sources_count": 2,
       "consistency_flag": "consistent",
-      "max_deviation_pct": 1.49,
+      "max_deviation_pct": 1.91,
       "sources": [
         {
           "name": "JAPIA",
           "current": 2089.5,
           "url": "https://www.japia.or.jp/?topics=press-release",
-          "fetched_at": "2026-04-30T23:20:24Z",
+          "fetched_at": "2026-05-04T03:40:14Z",
           "status": "ok",
           "history": [
             {
@@ -5824,9 +5828,9 @@
         },
         {
           "name": "World Bank",
-          "current": 2120.95,
+          "current": 2129.82,
           "url": "https://www.worldbank.org/en/research/commodity-markets",
-          "fetched_at": "2026-04-30T23:20:24Z",
+          "fetched_at": "2026-05-04T03:40:14Z",
           "status": "ok",
           "history": [
             {
@@ -7155,13 +7159,17 @@
             },
             {
               "date": "2026-04-20",
-              "value": 2120.95
+              "value": 2116.23
+            },
+            {
+              "date": "2026-04-27",
+              "value": 2129.82
             }
           ],
           "comparisons": {
-            "wow_pct": -0.62,
-            "mom_pct": 13.08,
-            "yoy_pct": 62.42
+            "wow_pct": 0.64,
+            "mom_pct": 10.25,
+            "yoy_pct": 63.1
           }
         }
       ]
@@ -7172,8 +7180,8 @@
       "unit": "円/kg",
       "display_mode": "single",
       "value_range": {
-        "min": 371.98,
-        "max": 371.98
+        "min": 372.92,
+        "max": 372.92
       },
       "sources_count": 1,
       "consistency_flag": "single",
@@ -7181,9 +7189,9 @@
       "sources": [
         {
           "name": "World Bank",
-          "current": 371.98,
+          "current": 372.92,
           "url": "https://www.worldbank.org/en/research/commodity-markets",
-          "fetched_at": "2026-04-30T23:20:24Z",
+          "fetched_at": "2026-05-04T03:40:14Z",
           "status": "ok",
           "history": [
             {
@@ -8512,13 +8520,17 @@
             },
             {
               "date": "2026-04-20",
-              "value": 371.98
+              "value": 371.0
+            },
+            {
+              "date": "2026-04-27",
+              "value": 372.92
             }
           ],
           "comparisons": {
-            "wow_pct": 0.74,
-            "mom_pct": 0.34,
-            "yoy_pct": -82.7
+            "wow_pct": 0.52,
+            "mom_pct": -0.06,
+            "yoy_pct": -82.66
           }
         }
       ]

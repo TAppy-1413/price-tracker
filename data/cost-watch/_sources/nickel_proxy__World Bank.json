@@ -3,7 +3,7 @@
   "source_name": "World Bank",
   "source_url": "https://www.worldbank.org/en/research/commodity-markets",
   "status": "ok",
-  "current": 371.98,
+  "current": 372.92,
   "history": [
     {
       "date": "2000-01-01",
@@ -1331,9 +1331,13 @@
     },
     {
       "date": "2026-04-20",
-      "value": 371.98
+      "value": 371.0
+    },
+    {
+      "date": "2026-04-27",
+      "value": 372.92
     }
   ],
-  "fetched_at": "2026-04-30T23:20:24Z",
+  "fetched_at": "2026-05-04T03:40:14Z",
   "error": null
 }
