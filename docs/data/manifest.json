@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-08 11:44 JST",
+  "generated_at": "2026-05-15 11:55 JST",
   "sources": {
     "diesel": {
       "rows": 0,
@@ -38,12 +38,12 @@
       "latest": "2025"
     },
     "materials": {
-      "rows": 75,
-      "latest": "2026-03-01"
+      "rows": 76,
+      "latest": "2026-04-01"
     },
     "metals": {
-      "rows": 334,
-      "latest": "2026-05-04"
+      "rows": 335,
+      "latest": "2026-05-11"
     },
     "min_wage": {
       "rows": 26,
