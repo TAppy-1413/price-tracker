@@ -2,7 +2,7 @@
   "item_id": "diesel_truck",
   "source_name": "JAPIA",
   "source_url": "https://www.japia.or.jp/",
-  "status": "ok",
+  "status": "stale",
   "current": 153.83,
   "history": [
     {
@@ -1718,6 +1718,6 @@
       "value": 153.83
     }
   ],
-  "fetched_at": "2026-05-25T04:16:22Z",
-  "error": null
+  "fetched_at": "2026-06-01T04:44:38Z",
+  "error": "latest 2026-03-01 is 92 days old (>90)"
 }

@@ -1,7 +1,7 @@
 {
   "category": "logistics",
   "category_name_ja": "物流費",
-  "last_updated": "2026-05-25T04:16:22Z",
+  "last_updated": "2026-06-01T04:44:38Z",
   "items": [
     {
       "id": "road_freight_index",
@@ -9,8 +9,8 @@
       "unit": "指数(2020=100)",
       "display_mode": "single",
       "value_range": {
-        "min": 109.8,
-        "max": 109.8
+        "min": 111.8,
+        "max": 111.8
       },
       "sources_count": 1,
       "consistency_flag": "single",
@@ -18,9 +18,9 @@
       "sources": [
         {
           "name": "日銀SPPI",
-          "current": 109.8,
+          "current": 111.8,
           "url": "https://www.boj.or.jp/statistics/pi/sppi_2020/index.htm",
-          "fetched_at": "2026-05-25T04:16:22Z",
+          "fetched_at": "2026-06-01T04:44:38Z",
           "status": "ok",
           "history": [
             {
@@ -1281,13 +1281,17 @@
             },
             {
               "date": "2026-03-01",
-              "value": 109.8
+              "value": 109.9
+            },
+            {
+              "date": "2026-04-01",
+              "value": 111.8
             }
           ],
           "comparisons": {
-            "wow_pct": 0.37,
-            "mom_pct": 0.37,
-            "yoy_pct": 3.0
+            "wow_pct": 1.73,
+            "mom_pct": 1.73,
+            "yoy_pct": 3.52
           }
         }
       ]
@@ -1297,20 +1301,17 @@
       "name_ja": "トラック軽油価格",
       "unit": "円/L",
       "display_mode": "single",
-      "value_range": {
-        "min": 153.83,
-        "max": 153.83
-      },
-      "sources_count": 1,
+      "value_range": null,
+      "sources_count": 0,
       "consistency_flag": "single",
-      "max_deviation_pct": 0.0,
+      "max_deviation_pct": null,
       "sources": [
         {
           "name": "JAPIA",
           "current": 153.83,
           "url": "https://www.japia.or.jp/",
-          "fetched_at": "2026-05-25T04:16:22Z",
-          "status": "ok",
+          "fetched_at": "2026-06-01T04:44:38Z",
+          "status": "stale",
           "history": [
             {
               "date": "1990-08-01",
@@ -3029,7 +3030,8 @@
             "wow_pct": 14.02,
             "mom_pct": 15.1,
             "yoy_pct": 0.84
-          }
+          },
+          "error": "latest 2026-03-01 is 92 days old (>90)"
         }
       ]
     },
@@ -3038,20 +3040,17 @@
       "name_ja": "燃料サーチャージ",
       "unit": "円/車",
       "display_mode": "single",
-      "value_range": {
-        "min": 11452.61,
-        "max": 11452.61
-      },
-      "sources_count": 1,
+      "value_range": null,
+      "sources_count": 0,
       "consistency_flag": "single",
-      "max_deviation_pct": 0.0,
+      "max_deviation_pct": null,
       "sources": [
         {
           "name": "JAPIA",
           "current": 11452.61,
           "url": "https://www.japia.or.jp/",
-          "fetched_at": "2026-05-25T04:16:22Z",
-          "status": "ok",
+          "fetched_at": "2026-06-01T04:44:38Z",
+          "status": "stale",
           "history": [
             {
               "date": "2005-08-01",
@@ -3982,7 +3981,8 @@
             "wow_pct": 54.15,
             "mom_pct": 59.98,
             "yoy_pct": 2.42
-          }
+          },
+          "error": "latest 2026-03-01 is 92 days old (>90)"
         }
       ]
     }

@@ -2,7 +2,7 @@
   "item_id": "steel_hot_rolled",
   "source_name": "JAPIA",
   "source_url": "https://www.japia.or.jp/?topics=press-release",
-  "status": "ok",
+  "status": "stale",
   "current": 99.0,
   "history": [
     {
@@ -2510,6 +2510,6 @@
       "value": 99.0
     }
   ],
-  "fetched_at": "2026-05-25T04:16:22Z",
-  "error": null
+  "fetched_at": "2026-06-01T04:44:38Z",
+  "error": "latest 2026-03-01 is 92 days old (>90)"
 }
