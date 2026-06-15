@@ -1,7 +1,7 @@
 {
   "category": "logistics",
   "category_name_ja": "物流費",
-  "last_updated": "2026-06-08T04:26:10Z",
+  "last_updated": "2026-06-15T04:54:01Z",
   "items": [
     {
       "id": "road_freight_index",
@@ -20,7 +20,7 @@
           "name": "日銀SPPI",
           "current": 111.8,
           "url": "https://www.boj.or.jp/statistics/pi/sppi_2020/index.htm",
-          "fetched_at": "2026-06-08T04:26:10Z",
+          "fetched_at": "2026-06-15T04:54:01Z",
           "status": "ok",
           "history": [
             {
@@ -1310,7 +1310,7 @@
           "name": "JAPIA",
           "current": 153.83,
           "url": "https://www.japia.or.jp/",
-          "fetched_at": "2026-06-08T04:26:10Z",
+          "fetched_at": "2026-06-15T04:54:01Z",
           "status": "stale",
           "history": [
             {
@@ -3031,7 +3031,7 @@
             "mom_pct": 15.1,
             "yoy_pct": 0.84
           },
-          "error": "latest 2026-03-01 is 99 days old (>90)"
+          "error": "latest 2026-03-01 is 106 days old (>90)"
         }
       ]
     },
@@ -3049,7 +3049,7 @@
           "name": "JAPIA",
           "current": 11452.61,
           "url": "https://www.japia.or.jp/",
-          "fetched_at": "2026-06-08T04:26:10Z",
+          "fetched_at": "2026-06-15T04:54:01Z",
           "status": "stale",
           "history": [
             {
@@ -3982,7 +3982,7 @@
             "mom_pct": 59.98,
             "yoy_pct": 2.42
           },
-          "error": "latest 2026-03-01 is 99 days old (>90)"
+          "error": "latest 2026-03-01 is 106 days old (>90)"
         }
       ]
     }
