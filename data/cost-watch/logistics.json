@@ -1,7 +1,7 @@
 {
   "category": "logistics",
   "category_name_ja": "物流費",
-  "last_updated": "2026-06-22T04:54:34Z",
+  "last_updated": "2026-06-29T04:22:03Z",
   "items": [
     {
       "id": "road_freight_index",
@@ -9,8 +9,8 @@
       "unit": "指数(2020=100)",
       "display_mode": "single",
       "value_range": {
-        "min": 111.8,
-        "max": 111.8
+        "min": 111.9,
+        "max": 111.9
       },
       "sources_count": 1,
       "consistency_flag": "single",
@@ -18,9 +18,9 @@
       "sources": [
         {
           "name": "日銀SPPI",
-          "current": 111.8,
+          "current": 111.9,
           "url": "https://www.boj.or.jp/statistics/pi/sppi_2020/index.htm",
-          "fetched_at": "2026-06-22T04:54:33Z",
+          "fetched_at": "2026-06-29T04:22:03Z",
           "status": "ok",
           "history": [
             {
@@ -1281,17 +1281,21 @@
             },
             {
               "date": "2026-03-01",
-              "value": 109.9
+              "value": 109.8
             },
             {
               "date": "2026-04-01",
               "value": 111.8
+            },
+            {
+              "date": "2026-05-01",
+              "value": 111.9
             }
           ],
           "comparisons": {
-            "wow_pct": 1.73,
-            "mom_pct": 1.73,
-            "yoy_pct": 3.52
+            "wow_pct": 0.09,
+            "mom_pct": 0.09,
+            "yoy_pct": 3.8
           }
         }
       ]
@@ -1310,7 +1314,7 @@
           "name": "JAPIA",
           "current": 153.83,
           "url": "https://www.japia.or.jp/",
-          "fetched_at": "2026-06-22T04:54:33Z",
+          "fetched_at": "2026-06-29T04:22:03Z",
           "status": "stale",
           "history": [
             {
@@ -3031,7 +3035,7 @@
             "mom_pct": 15.1,
             "yoy_pct": 0.84
           },
-          "error": "latest 2026-03-01 is 113 days old (>90)"
+          "error": "latest 2026-03-01 is 120 days old (>90)"
         }
       ]
     },
@@ -3049,7 +3053,7 @@
           "name": "JAPIA",
           "current": 11452.61,
           "url": "https://www.japia.or.jp/",
-          "fetched_at": "2026-06-22T04:54:33Z",
+          "fetched_at": "2026-06-29T04:22:03Z",
           "status": "stale",
           "history": [
             {
@@ -3982,7 +3986,7 @@
             "mom_pct": 59.98,
             "yoy_pct": 2.42
           },
-          "error": "latest 2026-03-01 is 113 days old (>90)"
+          "error": "latest 2026-03-01 is 120 days old (>90)"
         }
       ]
     }
