@@ -1,10 +1,15 @@
 {
   "item_id": "regular_gasoline_kanto",
   "source_name": "資源エネルギー庁",
-  "source_url": "https://www.enecho.meti.go.jp/statistics/petroleum_and_lpgas/pl007/results.html",
-  "status": "failed",
-  "current": null,
-  "history": [],
-  "fetched_at": "2026-06-29T04:20:03Z",
-  "error": "unable to reach https://www.enecho.meti.go.jp/statistics/petroleum_and_lpgas/pl007/results.html: all 2 attempts failed: HTTPSConnectionPool(host='www.enecho.meti.go.jp', port=443): Read timed out. (read timeout=60)"
+  "source_url": "https://www.enecho.meti.go.jp/statistics/petroleum_and_lpgas/pl007/260630k.xlsx",
+  "status": "ok",
+  "current": 33259.0,
+  "history": [
+    {
+      "date": "1990-08-27",
+      "value": 33259.0
+    }
+  ],
+  "fetched_at": "2026-07-06T03:57:19Z",
+  "error": null
 }

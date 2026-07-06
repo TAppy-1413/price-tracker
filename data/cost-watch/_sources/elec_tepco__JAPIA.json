@@ -2,7 +2,7 @@
   "item_id": "elec_tepco",
   "source_name": "JAPIA",
   "source_url": "https://www.japia.or.jp/",
-  "status": "ok",
+  "status": "stale",
   "current": 18.61,
   "history": [
     {
@@ -578,6 +578,6 @@
       "value": 18.61
     }
   ],
-  "fetched_at": "2026-06-29T04:22:03Z",
-  "error": null
+  "fetched_at": "2026-07-06T03:57:48Z",
+  "error": "latest 2026-04-01 is 96 days old (>90)"
 }
