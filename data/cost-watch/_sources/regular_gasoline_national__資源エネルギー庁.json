@@ -1,7 +1,7 @@
 {
   "item_id": "regular_gasoline_national",
   "source_name": "資源エネルギー庁",
-  "source_url": "https://www.enecho.meti.go.jp/statistics/petroleum_and_lpgas/pl007/260630k.xlsx",
+  "source_url": "https://www.enecho.meti.go.jp/statistics/petroleum_and_lpgas/pl007/xlsx/260731k.xlsx",
   "status": "ok",
   "current": 33511.0,
   "history": [
@@ -10,6 +10,6 @@
       "value": 33511.0
     }
   ],
-  "fetched_at": "2026-07-27T03:32:00Z",
+  "fetched_at": "2026-08-03T03:22:15Z",
   "error": null
 }
