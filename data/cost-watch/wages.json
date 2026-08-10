@@ -1,27 +1,24 @@
 {
   "category": "wages",
   "category_name_ja": "人件費",
-  "last_updated": "2026-08-03T03:22:45Z",
+  "last_updated": "2026-08-10T02:05:11Z",
   "items": [
     {
       "id": "min_wage_tochigi",
       "name_ja": "栃木県最低賃金",
       "unit": "円/時",
-      "display_mode": "range",
-      "value_range": {
-        "min": 1038.0,
-        "max": 1068.0
-      },
-      "sources_count": 2,
-      "consistency_flag": "warning",
-      "max_deviation_pct": 2.85,
+      "display_mode": "single",
+      "value_range": null,
+      "sources_count": 0,
+      "consistency_flag": "single",
+      "max_deviation_pct": null,
       "sources": [
         {
           "name": "JAPIA",
           "current": 1068.0,
           "url": "https://www.japia.or.jp/",
-          "fetched_at": "2026-08-03T03:22:44Z",
-          "status": "ok",
+          "fetched_at": "2026-08-10T02:05:11Z",
+          "status": "stale",
           "history": [
             {
               "date": "2002-07-01",
@@ -124,14 +121,15 @@
             "wow_pct": 6.37,
             "mom_pct": 6.37,
             "yoy_pct": 6.37
-          }
+          },
+          "error": "latest 2025-07-01 is 405 days old (>400)"
         },
         {
           "name": "厚労省",
           "current": 1038.0,
           "url": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/roudoukijun/minimumichiran/",
-          "fetched_at": "2026-08-03T03:22:44Z",
-          "status": "ok",
+          "fetched_at": "2026-08-10T02:05:11Z",
+          "status": "stale",
           "history": [
             {
               "date": "2000-07-01",
@@ -242,7 +240,8 @@
             "wow_pct": 3.39,
             "mom_pct": 3.39,
             "yoy_pct": 3.39
-          }
+          },
+          "error": "latest 2025-07-01 is 405 days old (>400)"
         }
       ]
     },
@@ -250,21 +249,18 @@
       "id": "min_wage_nationwide",
       "name_ja": "全国加重平均賃金",
       "unit": "円/時",
-      "display_mode": "range",
-      "value_range": {
-        "min": 1055.0,
-        "max": 1121.0
-      },
-      "sources_count": 2,
-      "consistency_flag": "divergent",
-      "max_deviation_pct": 6.07,
+      "display_mode": "single",
+      "value_range": null,
+      "sources_count": 0,
+      "consistency_flag": "single",
+      "max_deviation_pct": null,
       "sources": [
         {
           "name": "JAPIA",
           "current": 1121.0,
           "url": "https://www.japia.or.jp/",
-          "fetched_at": "2026-08-03T03:22:44Z",
-          "status": "ok",
+          "fetched_at": "2026-08-10T02:05:11Z",
+          "status": "stale",
           "history": [
             {
               "date": "2002-07-01",
@@ -367,14 +363,15 @@
             "wow_pct": 6.26,
             "mom_pct": 6.26,
             "yoy_pct": 6.26
-          }
+          },
+          "error": "latest 2025-07-01 is 405 days old (>400)"
         },
         {
           "name": "厚労省",
           "current": 1055.0,
           "url": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/roudoukijun/minimumichiran/",
-          "fetched_at": "2026-08-03T03:22:44Z",
-          "status": "ok",
+          "fetched_at": "2026-08-10T02:05:11Z",
+          "status": "stale",
           "history": [
             {
               "date": "2000-07-01",
@@ -485,7 +482,8 @@
             "wow_pct": 0.0,
             "mom_pct": 0.0,
             "yoy_pct": 0.0
-          }
+          },
+          "error": "latest 2025-07-01 is 405 days old (>400)"
         }
       ]
     }

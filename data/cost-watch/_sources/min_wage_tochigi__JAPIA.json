@@ -2,7 +2,7 @@
   "item_id": "min_wage_tochigi",
   "source_name": "JAPIA",
   "source_url": "https://www.japia.or.jp/",
-  "status": "ok",
+  "status": "stale",
   "current": 1068.0,
   "history": [
     {
@@ -102,6 +102,6 @@
       "value": 1068.0
     }
   ],
-  "fetched_at": "2026-08-03T03:22:44Z",
-  "error": null
+  "fetched_at": "2026-08-10T02:05:11Z",
+  "error": "latest 2025-07-01 is 405 days old (>400)"
 }
