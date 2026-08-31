@@ -3,7 +3,7 @@
   "source_name": "日銀SPPI",
   "source_url": "https://www.boj.or.jp/statistics/pi/sppi_2020/index.htm",
   "status": "ok",
-  "current": 111.6,
+  "current": 112.9,
   "history": [
     {
       "date": "2000-01-01",
@@ -1267,17 +1267,21 @@
     },
     {
       "date": "2026-04-01",
-      "value": 111.6
+      "value": 112.5
     },
     {
       "date": "2026-05-01",
-      "value": 111.7
+      "value": 112.6
     },
     {
       "date": "2026-06-01",
-      "value": 111.6
+      "value": 112.5
+    },
+    {
+      "date": "2026-07-01",
+      "value": 112.9
     }
   ],
-  "fetched_at": "2026-08-24T01:36:33Z",
+  "fetched_at": "2026-08-31T04:39:51Z",
   "error": null
 }
