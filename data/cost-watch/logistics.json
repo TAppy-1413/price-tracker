@@ -1,7 +1,7 @@
 {
   "category": "logistics",
   "category_name_ja": "物流費",
-  "last_updated": "2026-09-28T04:33:46Z",
+  "last_updated": "2026-10-05T04:51:30Z",
   "items": [
     {
       "id": "road_freight_index",
@@ -9,8 +9,8 @@
       "unit": "指数(2020=100)",
       "display_mode": "single",
       "value_range": {
-        "min": 112.9,
-        "max": 112.9
+        "min": 113.3,
+        "max": 113.3
       },
       "sources_count": 1,
       "consistency_flag": "single",
@@ -18,9 +18,9 @@
       "sources": [
         {
           "name": "日銀SPPI",
-          "current": 112.9,
+          "current": 113.3,
           "url": "https://www.boj.or.jp/statistics/pi/sppi_2020/index.htm",
-          "fetched_at": "2026-09-28T04:33:46Z",
+          "fetched_at": "2026-10-05T04:51:30Z",
           "status": "ok",
           "history": [
             {
@@ -1229,59 +1229,59 @@
             },
             {
               "date": "2025-02-01",
-              "value": 106.3
+              "value": 106.0
             },
             {
               "date": "2025-03-01",
-              "value": 106.6
+              "value": 106.4
             },
             {
               "date": "2025-04-01",
-              "value": 108.0
+              "value": 108.3
             },
             {
               "date": "2025-05-01",
-              "value": 107.8
+              "value": 108.1
             },
             {
               "date": "2025-06-01",
-              "value": 107.7
+              "value": 107.9
             },
             {
               "date": "2025-07-01",
-              "value": 108.0
-            },
-            {
-              "date": "2025-08-01",
-              "value": 108.4
-            },
-            {
-              "date": "2025-09-01",
-              "value": 108.0
-            },
-            {
-              "date": "2025-10-01",
               "value": 108.2
             },
             {
+              "date": "2025-08-01",
+              "value": 108.6
+            },
+            {
+              "date": "2025-09-01",
+              "value": 108.3
+            },
+            {
+              "date": "2025-10-01",
+              "value": 108.5
+            },
+            {
               "date": "2025-11-01",
-              "value": 108.4
+              "value": 108.7
             },
             {
               "date": "2025-12-01",
-              "value": 108.9
+              "value": 109.1
             },
             {
               "date": "2026-01-01",
-              "value": 109.4
+              "value": 109.6
             },
             {
               "date": "2026-02-01",
-              "value": 109.4
+              "value": 109.6
             },
             {
               "date": "2026-03-01",
-              "value": 109.5
+              "value": 110.0
             },
             {
               "date": "2026-04-01",
@@ -1298,12 +1298,16 @@
             {
               "date": "2026-07-01",
               "value": 112.9
+            },
+            {
+              "date": "2026-08-01",
+              "value": 113.3
             }
           ],
           "comparisons": {
-            "wow_pct": 0.36,
-            "mom_pct": 0.36,
-            "yoy_pct": 4.54
+            "wow_pct": 0.35,
+            "mom_pct": 0.35,
+            "yoy_pct": 4.33
           }
         }
       ]
@@ -1322,7 +1326,7 @@
           "name": "JAPIA",
           "current": 153.83,
           "url": "https://www.japia.or.jp/",
-          "fetched_at": "2026-09-28T04:33:46Z",
+          "fetched_at": "2026-10-05T04:51:30Z",
           "status": "stale",
           "history": [
             {
@@ -3043,7 +3047,7 @@
             "mom_pct": 15.1,
             "yoy_pct": 0.84
           },
-          "error": "latest 2026-03-01 is 211 days old (>90)"
+          "error": "latest 2026-03-01 is 218 days old (>90)"
         }
       ]
     },
@@ -3061,7 +3065,7 @@
           "name": "JAPIA",
           "current": 11452.61,
           "url": "https://www.japia.or.jp/",
-          "fetched_at": "2026-09-28T04:33:46Z",
+          "fetched_at": "2026-10-05T04:51:30Z",
           "status": "stale",
           "history": [
             {
@@ -3994,7 +3998,7 @@
             "mom_pct": 59.98,
             "yoy_pct": 2.42
           },
-          "error": "latest 2026-03-01 is 211 days old (>90)"
+          "error": "latest 2026-03-01 is 218 days old (>90)"
         }
       ]
     }

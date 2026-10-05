@@ -3,12 +3,8 @@
   "source_name": "e燃費",
   "source_url": "https://e-nenpi.com/gs/price_graph/6/3/0/",
   "status": "ok",
-  "current": 145.0,
+  "current": 143.7,
   "history": [
-    {
-      "date": "2021-10-01",
-      "value": 130.3
-    },
     {
       "date": "2021-11-01",
       "value": 134.3
@@ -246,10 +242,14 @@
       "value": 144.7
     },
     {
-      "date": "2026-09-27",
-      "value": 145.0
+      "date": "2026-10-01",
+      "value": 144.2
+    },
+    {
+      "date": "2026-10-04",
+      "value": 143.7
     }
   ],
-  "fetched_at": "2026-09-28T04:33:09Z",
+  "fetched_at": "2026-10-05T04:50:52Z",
   "error": null
 }
