@@ -1,7 +1,7 @@
 {
   "category": "fuel",
   "category_name_ja": "燃料",
-  "last_updated": "2026-10-12T05:10:43Z",
+  "last_updated": "2026-10-19T03:57:05Z",
   "items": [
     {
       "id": "regular_gasoline_national",
@@ -9,18 +9,18 @@
       "unit": "円/L",
       "display_mode": "range",
       "value_range": {
-        "min": 156.9,
+        "min": 157.4,
         "max": 33511.0
       },
       "sources_count": 2,
       "consistency_flag": "divergent",
-      "max_deviation_pct": 198.14,
+      "max_deviation_pct": 198.13,
       "sources": [
         {
           "name": "e燃費",
-          "current": 156.9,
+          "current": 157.4,
           "url": "https://e-nenpi.com/gs/price_graph/6/1/0/",
-          "fetched_at": "2026-10-12T05:10:06Z",
+          "fetched_at": "2026-10-19T03:56:27Z",
           "status": "ok",
           "history": [
             {
@@ -264,21 +264,21 @@
               "value": 157.0
             },
             {
-              "date": "2026-10-11",
-              "value": 156.9
+              "date": "2026-10-18",
+              "value": 157.4
             }
           ],
           "comparisons": {
-            "wow_pct": -0.06,
-            "mom_pct": 0.0,
-            "yoy_pct": -2.61
+            "wow_pct": 0.25,
+            "mom_pct": 0.32,
+            "yoy_pct": -2.3
           }
         },
         {
           "name": "石油情報センター",
           "current": 157.6,
           "url": "https://oil-info.ieej.or.jp/price/data/SekiyuWeekly.xls",
-          "fetched_at": "2026-10-12T05:10:06Z",
+          "fetched_at": "2026-10-19T03:56:27Z",
           "status": "stale",
           "history": [
             {
@@ -495,13 +495,13 @@
             "mom_pct": 9.83,
             "yoy_pct": null
           },
-          "error": "latest data point 2012-03-26 is 5313 days old (>14)"
+          "error": "latest data point 2012-03-26 is 5320 days old (>14)"
         },
         {
           "name": "資源エネルギー庁",
           "current": 33511.0,
           "url": "https://www.enecho.meti.go.jp/statistics/petroleum_and_lpgas/pl007/xlsx/260930k.xlsx",
-          "fetched_at": "2026-10-12T05:10:15Z",
+          "fetched_at": "2026-10-19T03:56:36Z",
           "status": "ok",
           "history": [
             {
@@ -523,18 +523,18 @@
       "unit": "円/L",
       "display_mode": "range",
       "value_range": {
-        "min": 144.6,
+        "min": 144.1,
         "max": 33511.0
       },
       "sources_count": 2,
       "consistency_flag": "divergent",
-      "max_deviation_pct": 198.28,
+      "max_deviation_pct": 198.29,
       "sources": [
         {
           "name": "e燃費",
-          "current": 144.6,
+          "current": 144.1,
           "url": "https://e-nenpi.com/gs/price_graph/6/3/0/",
-          "fetched_at": "2026-10-12T05:10:06Z",
+          "fetched_at": "2026-10-19T03:56:27Z",
           "status": "ok",
           "history": [
             {
@@ -775,24 +775,24 @@
             },
             {
               "date": "2026-10-01",
-              "value": 144.7
+              "value": 144.6
             },
             {
-              "date": "2026-10-11",
-              "value": 144.6
+              "date": "2026-10-18",
+              "value": 144.1
             }
           ],
           "comparisons": {
-            "wow_pct": -0.07,
-            "mom_pct": -0.07,
-            "yoy_pct": 4.71
+            "wow_pct": -0.35,
+            "mom_pct": -0.41,
+            "yoy_pct": 4.34
           }
         },
         {
           "name": "石油情報センター",
           "current": 136.6,
           "url": "https://oil-info.ieej.or.jp/price/data/SekiyuWeekly.xls",
-          "fetched_at": "2026-10-12T05:10:06Z",
+          "fetched_at": "2026-10-19T03:56:27Z",
           "status": "stale",
           "history": [
             {
@@ -1009,13 +1009,13 @@
             "mom_pct": 9.54,
             "yoy_pct": null
           },
-          "error": "latest data point 2012-03-26 is 5313 days old (>14)"
+          "error": "latest data point 2012-03-26 is 5320 days old (>14)"
         },
         {
           "name": "資源エネルギー庁",
           "current": 33511.0,
           "url": "https://www.enecho.meti.go.jp/statistics/petroleum_and_lpgas/pl007/xlsx/260930k.xlsx",
-          "fetched_at": "2026-10-12T05:10:15Z",
+          "fetched_at": "2026-10-19T03:56:36Z",
           "status": "ok",
           "history": [
             {
@@ -1048,7 +1048,7 @@
           "name": "石油情報センター",
           "current": 157.4,
           "url": "https://oil-info.ieej.or.jp/price/data/SekiyuWeekly.xls",
-          "fetched_at": "2026-10-12T05:10:06Z",
+          "fetched_at": "2026-10-19T03:56:27Z",
           "status": "stale",
           "history": [
             {
@@ -1265,13 +1265,13 @@
             "mom_pct": 10.07,
             "yoy_pct": null
           },
-          "error": "latest data point 2012-03-26 is 5313 days old (>14)"
+          "error": "latest data point 2012-03-26 is 5320 days old (>14)"
         },
         {
           "name": "資源エネルギー庁",
           "current": 33259.0,
           "url": "https://www.enecho.meti.go.jp/statistics/petroleum_and_lpgas/pl007/xlsx/260930k.xlsx",
-          "fetched_at": "2026-10-12T05:10:15Z",
+          "fetched_at": "2026-10-19T03:56:36Z",
           "status": "ok",
           "history": [
             {
