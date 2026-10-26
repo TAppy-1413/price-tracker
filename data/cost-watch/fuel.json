@@ -1,284 +1,40 @@
 {
   "category": "fuel",
   "category_name_ja": "燃料",
-  "last_updated": "2026-10-19T03:57:05Z",
+  "last_updated": "2026-10-26T03:59:58Z",
   "items": [
     {
       "id": "regular_gasoline_national",
       "name_ja": "レギュラーガソリン（全国平均）",
       "unit": "円/L",
-      "display_mode": "range",
+      "display_mode": "single",
       "value_range": {
-        "min": 157.4,
+        "min": 33511.0,
         "max": 33511.0
       },
-      "sources_count": 2,
-      "consistency_flag": "divergent",
-      "max_deviation_pct": 198.13,
+      "sources_count": 1,
+      "consistency_flag": "single",
+      "max_deviation_pct": 0.0,
       "sources": [
         {
           "name": "e燃費",
-          "current": 157.4,
+          "current": null,
           "url": "https://e-nenpi.com/gs/price_graph/6/1/0/",
-          "fetched_at": "2026-10-19T03:56:27Z",
-          "status": "ok",
-          "history": [
-            {
-              "date": "2021-11-01",
-              "value": 157.9
-            },
-            {
-              "date": "2021-12-01",
-              "value": 153.6
-            },
-            {
-              "date": "2022-01-01",
-              "value": 156.1
-            },
-            {
-              "date": "2022-02-01",
-              "value": 160.2
-            },
-            {
-              "date": "2022-03-01",
-              "value": 163.1
-            },
-            {
-              "date": "2022-04-01",
-              "value": 161.0
-            },
-            {
-              "date": "2022-05-01",
-              "value": 156.4
-            },
-            {
-              "date": "2022-06-01",
-              "value": 160.0
-            },
-            {
-              "date": "2022-07-01",
-              "value": 158.4
-            },
-            {
-              "date": "2022-08-01",
-              "value": 155.8
-            },
-            {
-              "date": "2022-09-01",
-              "value": 156.3
-            },
-            {
-              "date": "2022-10-01",
-              "value": 155.4
-            },
-            {
-              "date": "2022-11-01",
-              "value": 154.0
-            },
-            {
-              "date": "2022-12-01",
-              "value": 154.7
-            },
-            {
-              "date": "2023-01-01",
-              "value": 154.8
-            },
-            {
-              "date": "2023-02-01",
-              "value": 153.9
-            },
-            {
-              "date": "2023-03-01",
-              "value": 154.2
-            },
-            {
-              "date": "2023-04-01",
-              "value": 155.4
-            },
-            {
-              "date": "2023-05-01",
-              "value": 154.9
-            },
-            {
-              "date": "2023-06-01",
-              "value": 157.6
-            },
-            {
-              "date": "2023-07-01",
-              "value": 162.7
-            },
-            {
-              "date": "2023-08-01",
-              "value": 172.1
-            },
-            {
-              "date": "2023-09-01",
-              "value": 171.4
-            },
-            {
-              "date": "2023-10-01",
-              "value": 162.4
-            },
-            {
-              "date": "2023-11-01",
-              "value": 160.7
-            },
-            {
-              "date": "2023-12-01",
-              "value": 161.9
-            },
-            {
-              "date": "2024-01-01",
-              "value": 162.1
-            },
-            {
-              "date": "2024-02-01",
-              "value": 160.8
-            },
-            {
-              "date": "2024-03-01",
-              "value": 160.8
-            },
-            {
-              "date": "2024-04-01",
-              "value": 162.5
-            },
-            {
-              "date": "2024-05-01",
-              "value": 162.0
-            },
-            {
-              "date": "2024-06-01",
-              "value": 162.0
-            },
-            {
-              "date": "2024-07-01",
-              "value": 163.4
-            },
-            {
-              "date": "2024-08-01",
-              "value": 161.6
-            },
-            {
-              "date": "2024-09-01",
-              "value": 161.7
-            },
-            {
-              "date": "2024-10-01",
-              "value": 162.1
-            },
-            {
-              "date": "2024-11-01",
-              "value": 161.4
-            },
-            {
-              "date": "2024-12-01",
-              "value": 164.8
-            },
-            {
-              "date": "2025-01-01",
-              "value": 169.7
-            },
-            {
-              "date": "2025-02-01",
-              "value": 170.4
-            },
-            {
-              "date": "2025-03-01",
-              "value": 170.5
-            },
-            {
-              "date": "2025-04-01",
-              "value": 172.6
-            },
-            {
-              "date": "2025-05-01",
-              "value": 167.3
-            },
-            {
-              "date": "2025-06-01",
-              "value": 158.1
-            },
-            {
-              "date": "2025-07-01",
-              "value": 160.2
-            },
-            {
-              "date": "2025-08-01",
-              "value": 161.6
-            },
-            {
-              "date": "2025-09-01",
-              "value": 162.1
-            },
-            {
-              "date": "2025-10-01",
-              "value": 161.1
-            },
-            {
-              "date": "2025-11-01",
-              "value": 156.4
-            },
-            {
-              "date": "2025-12-01",
-              "value": 145.1
-            },
-            {
-              "date": "2026-01-01",
-              "value": 140.8
-            },
-            {
-              "date": "2026-02-01",
-              "value": 142.7
-            },
-            {
-              "date": "2026-03-01",
-              "value": 157.4
-            },
-            {
-              "date": "2026-04-01",
-              "value": 155.0
-            },
-            {
-              "date": "2026-05-01",
-              "value": 155.9
-            },
-            {
-              "date": "2026-06-01",
-              "value": 156.3
-            },
-            {
-              "date": "2026-07-01",
-              "value": 156.6
-            },
-            {
-              "date": "2026-08-01",
-              "value": 156.8
-            },
-            {
-              "date": "2026-09-01",
-              "value": 156.9
-            },
-            {
-              "date": "2026-10-01",
-              "value": 157.0
-            },
-            {
-              "date": "2026-10-18",
-              "value": 157.4
-            }
-          ],
+          "fetched_at": "2026-10-26T03:59:19Z",
+          "status": "failed",
+          "history": [],
           "comparisons": {
-            "wow_pct": 0.25,
-            "mom_pct": 0.32,
-            "yoy_pct": -2.3
-          }
+            "wow_pct": null,
+            "mom_pct": null,
+            "yoy_pct": null
+          },
+          "error": "no realtime or history data extracted"
         },
         {
           "name": "石油情報センター",
           "current": 157.6,
           "url": "https://oil-info.ieej.or.jp/price/data/SekiyuWeekly.xls",
-          "fetched_at": "2026-10-19T03:56:27Z",
+          "fetched_at": "2026-10-26T03:59:19Z",
           "status": "stale",
           "history": [
             {
@@ -495,13 +251,13 @@
             "mom_pct": 9.83,
             "yoy_pct": null
           },
-          "error": "latest data point 2012-03-26 is 5320 days old (>14)"
+          "error": "latest data point 2012-03-26 is 5327 days old (>14)"
         },
         {
           "name": "資源エネルギー庁",
           "current": 33511.0,
           "url": "https://www.enecho.meti.go.jp/statistics/petroleum_and_lpgas/pl007/xlsx/260930k.xlsx",
-          "fetched_at": "2026-10-19T03:56:36Z",
+          "fetched_at": "2026-10-26T03:59:29Z",
           "status": "ok",
           "history": [
             {
@@ -521,278 +277,34 @@
       "id": "diesel_national",
       "name_ja": "軽油（全国平均）",
       "unit": "円/L",
-      "display_mode": "range",
+      "display_mode": "single",
       "value_range": {
-        "min": 144.1,
+        "min": 33511.0,
         "max": 33511.0
       },
-      "sources_count": 2,
-      "consistency_flag": "divergent",
-      "max_deviation_pct": 198.29,
+      "sources_count": 1,
+      "consistency_flag": "single",
+      "max_deviation_pct": 0.0,
       "sources": [
         {
           "name": "e燃費",
-          "current": 144.1,
+          "current": null,
           "url": "https://e-nenpi.com/gs/price_graph/6/3/0/",
-          "fetched_at": "2026-10-19T03:56:27Z",
-          "status": "ok",
-          "history": [
-            {
-              "date": "2021-11-01",
-              "value": 134.3
-            },
-            {
-              "date": "2021-12-01",
-              "value": 130.4
-            },
-            {
-              "date": "2022-01-01",
-              "value": 132.8
-            },
-            {
-              "date": "2022-02-01",
-              "value": 136.5
-            },
-            {
-              "date": "2022-03-01",
-              "value": 139.2
-            },
-            {
-              "date": "2022-04-01",
-              "value": 137.2
-            },
-            {
-              "date": "2022-05-01",
-              "value": 133.1
-            },
-            {
-              "date": "2022-06-01",
-              "value": 136.3
-            },
-            {
-              "date": "2022-07-01",
-              "value": 134.9
-            },
-            {
-              "date": "2022-08-01",
-              "value": 132.8
-            },
-            {
-              "date": "2022-09-01",
-              "value": 132.8
-            },
-            {
-              "date": "2022-10-01",
-              "value": 132.3
-            },
-            {
-              "date": "2022-11-01",
-              "value": 130.9
-            },
-            {
-              "date": "2022-12-01",
-              "value": 131.7
-            },
-            {
-              "date": "2023-01-01",
-              "value": 131.9
-            },
-            {
-              "date": "2023-02-01",
-              "value": 130.7
-            },
-            {
-              "date": "2023-03-01",
-              "value": 131.1
-            },
-            {
-              "date": "2023-04-01",
-              "value": 131.9
-            },
-            {
-              "date": "2023-05-01",
-              "value": 131.6
-            },
-            {
-              "date": "2023-06-01",
-              "value": 134.1
-            },
-            {
-              "date": "2023-07-01",
-              "value": 138.6
-            },
-            {
-              "date": "2023-08-01",
-              "value": 148.1
-            },
-            {
-              "date": "2023-09-01",
-              "value": 146.5
-            },
-            {
-              "date": "2023-10-01",
-              "value": 137.4
-            },
-            {
-              "date": "2023-11-01",
-              "value": 136.1
-            },
-            {
-              "date": "2023-12-01",
-              "value": 137.4
-            },
-            {
-              "date": "2024-01-01",
-              "value": 138.1
-            },
-            {
-              "date": "2024-02-01",
-              "value": 137.0
-            },
-            {
-              "date": "2024-03-01",
-              "value": 137.0
-            },
-            {
-              "date": "2024-04-01",
-              "value": 138.4
-            },
-            {
-              "date": "2024-05-01",
-              "value": 138.2
-            },
-            {
-              "date": "2024-06-01",
-              "value": 138.1
-            },
-            {
-              "date": "2024-07-01",
-              "value": 139.5
-            },
-            {
-              "date": "2024-08-01",
-              "value": 137.7
-            },
-            {
-              "date": "2024-09-01",
-              "value": 137.8
-            },
-            {
-              "date": "2024-10-01",
-              "value": 137.9
-            },
-            {
-              "date": "2024-11-01",
-              "value": 137.6
-            },
-            {
-              "date": "2024-12-01",
-              "value": 140.8
-            },
-            {
-              "date": "2025-01-01",
-              "value": 145.4
-            },
-            {
-              "date": "2025-02-01",
-              "value": 146.3
-            },
-            {
-              "date": "2025-03-01",
-              "value": 146.7
-            },
-            {
-              "date": "2025-04-01",
-              "value": 148.7
-            },
-            {
-              "date": "2025-05-01",
-              "value": 143.8
-            },
-            {
-              "date": "2025-06-01",
-              "value": 134.8
-            },
-            {
-              "date": "2025-07-01",
-              "value": 136.5
-            },
-            {
-              "date": "2025-08-01",
-              "value": 138.1
-            },
-            {
-              "date": "2025-09-01",
-              "value": 138.5
-            },
-            {
-              "date": "2025-10-01",
-              "value": 138.1
-            },
-            {
-              "date": "2025-11-01",
-              "value": 133.8
-            },
-            {
-              "date": "2025-12-01",
-              "value": 128.3
-            },
-            {
-              "date": "2026-01-01",
-              "value": 126.6
-            },
-            {
-              "date": "2026-02-01",
-              "value": 128.1
-            },
-            {
-              "date": "2026-03-01",
-              "value": 143.3
-            },
-            {
-              "date": "2026-04-01",
-              "value": 142.4
-            },
-            {
-              "date": "2026-05-01",
-              "value": 143.7
-            },
-            {
-              "date": "2026-06-01",
-              "value": 144.3
-            },
-            {
-              "date": "2026-07-01",
-              "value": 144.4
-            },
-            {
-              "date": "2026-08-01",
-              "value": 144.5
-            },
-            {
-              "date": "2026-09-01",
-              "value": 144.7
-            },
-            {
-              "date": "2026-10-01",
-              "value": 144.6
-            },
-            {
-              "date": "2026-10-18",
-              "value": 144.1
-            }
-          ],
+          "fetched_at": "2026-10-26T03:59:19Z",
+          "status": "failed",
+          "history": [],
           "comparisons": {
-            "wow_pct": -0.35,
-            "mom_pct": -0.41,
-            "yoy_pct": 4.34
-          }
+            "wow_pct": null,
+            "mom_pct": null,
+            "yoy_pct": null
+          },
+          "error": "no realtime or history data extracted"
         },
         {
           "name": "石油情報センター",
           "current": 136.6,
           "url": "https://oil-info.ieej.or.jp/price/data/SekiyuWeekly.xls",
-          "fetched_at": "2026-10-19T03:56:27Z",
+          "fetched_at": "2026-10-26T03:59:19Z",
           "status": "stale",
           "history": [
             {
@@ -1009,13 +521,13 @@
             "mom_pct": 9.54,
             "yoy_pct": null
           },
-          "error": "latest data point 2012-03-26 is 5320 days old (>14)"
+          "error": "latest data point 2012-03-26 is 5327 days old (>14)"
         },
         {
           "name": "資源エネルギー庁",
           "current": 33511.0,
           "url": "https://www.enecho.meti.go.jp/statistics/petroleum_and_lpgas/pl007/xlsx/260930k.xlsx",
-          "fetched_at": "2026-10-19T03:56:36Z",
+          "fetched_at": "2026-10-26T03:59:29Z",
           "status": "ok",
           "history": [
             {
@@ -1048,7 +560,7 @@
           "name": "石油情報センター",
           "current": 157.4,
           "url": "https://oil-info.ieej.or.jp/price/data/SekiyuWeekly.xls",
-          "fetched_at": "2026-10-19T03:56:27Z",
+          "fetched_at": "2026-10-26T03:59:19Z",
           "status": "stale",
           "history": [
             {
@@ -1265,13 +777,13 @@
             "mom_pct": 10.07,
             "yoy_pct": null
           },
-          "error": "latest data point 2012-03-26 is 5320 days old (>14)"
+          "error": "latest data point 2012-03-26 is 5327 days old (>14)"
         },
         {
           "name": "資源エネルギー庁",
           "current": 33259.0,
           "url": "https://www.enecho.meti.go.jp/statistics/petroleum_and_lpgas/pl007/xlsx/260930k.xlsx",
-          "fetched_at": "2026-10-19T03:56:36Z",
+          "fetched_at": "2026-10-26T03:59:29Z",
           "status": "ok",
           "history": [
             {
