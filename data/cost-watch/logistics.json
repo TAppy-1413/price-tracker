@@ -1,7 +1,7 @@
 {
   "category": "logistics",
   "category_name_ja": "物流費",
-  "last_updated": "2026-10-26T03:59:58Z",
+  "last_updated": "2026-11-02T05:12:35Z",
   "items": [
     {
       "id": "road_freight_index",
@@ -20,7 +20,7 @@
           "name": "日銀SPPI",
           "current": 113.3,
           "url": "https://www.boj.or.jp/statistics/pi/sppi_2020/index.htm",
-          "fetched_at": "2026-10-26T03:59:58Z",
+          "fetched_at": "2026-11-02T05:12:35Z",
           "status": "ok",
           "history": [
             {
@@ -1302,12 +1302,16 @@
             {
               "date": "2026-08-01",
               "value": 113.3
+            },
+            {
+              "date": "2026-09-01",
+              "value": 113.3
             }
           ],
           "comparisons": {
-            "wow_pct": 0.35,
-            "mom_pct": 0.35,
-            "yoy_pct": 4.33
+            "wow_pct": 0.0,
+            "mom_pct": 0.0,
+            "yoy_pct": 4.62
           }
         }
       ]
@@ -1326,7 +1330,7 @@
           "name": "JAPIA",
           "current": 153.83,
           "url": "https://www.japia.or.jp/",
-          "fetched_at": "2026-10-26T03:59:58Z",
+          "fetched_at": "2026-11-02T05:12:35Z",
           "status": "stale",
           "history": [
             {
@@ -3047,7 +3051,7 @@
             "mom_pct": 15.1,
             "yoy_pct": 0.84
           },
-          "error": "latest 2026-03-01 is 239 days old (>90)"
+          "error": "latest 2026-03-01 is 246 days old (>90)"
         }
       ]
     },
@@ -3065,7 +3069,7 @@
           "name": "JAPIA",
           "current": 11452.61,
           "url": "https://www.japia.or.jp/",
-          "fetched_at": "2026-10-26T03:59:58Z",
+          "fetched_at": "2026-11-02T05:12:35Z",
           "status": "stale",
           "history": [
             {
@@ -3998,7 +4002,7 @@
             "mom_pct": 59.98,
             "yoy_pct": 2.42
           },
-          "error": "latest 2026-03-01 is 239 days old (>90)"
+          "error": "latest 2026-03-01 is 246 days old (>90)"
         }
       ]
     }
