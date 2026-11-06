@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-30 13:17 JST",
+  "generated_at": "2026-11-06 14:00 JST",
   "sources": {
     "diesel": {
       "rows": 0,
@@ -42,8 +42,8 @@
       "latest": "2026-09-01"
     },
     "metals": {
-      "rows": 359,
-      "latest": "2026-10-26"
+      "rows": 360,
+      "latest": "2026-11-02"
     },
     "min_wage": {
       "rows": 26,
