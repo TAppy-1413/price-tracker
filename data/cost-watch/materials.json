@@ -1,7 +1,7 @@
 {
   "category": "materials",
   "category_name_ja": "材料費",
-  "last_updated": "2026-11-02T05:12:35Z",
+  "last_updated": "2026-11-09T05:29:23Z",
   "items": [
     {
       "id": "steel_hot_rolled",
@@ -17,7 +17,7 @@
           "name": "JAPIA",
           "current": 99.0,
           "url": "https://www.japia.or.jp/?topics=press-release",
-          "fetched_at": "2026-11-02T05:12:35Z",
+          "fetched_at": "2026-11-09T05:29:23Z",
           "status": "stale",
           "history": [
             {
@@ -2530,7 +2530,7 @@
             "mom_pct": 0.0,
             "yoy_pct": -5.71
           },
-          "error": "latest 2026-03-01 is 246 days old (>90)"
+          "error": "latest 2026-03-01 is 253 days old (>90)"
         }
       ]
     },
@@ -2540,8 +2540,8 @@
       "unit": "円/kg",
       "display_mode": "single",
       "value_range": {
-        "min": 498.55,
-        "max": 498.55
+        "min": 501.59,
+        "max": 501.59
       },
       "sources_count": 1,
       "consistency_flag": "single",
@@ -2551,7 +2551,7 @@
           "name": "JAPIA",
           "current": 634.175,
           "url": "https://www.japia.or.jp/?topics=press-release",
-          "fetched_at": "2026-11-02T05:12:35Z",
+          "fetched_at": "2026-11-09T05:29:23Z",
           "status": "stale",
           "history": [
             {
@@ -3288,13 +3288,13 @@
             "mom_pct": 10.02,
             "yoy_pct": 28.41
           },
-          "error": "latest 2026-03-01 is 246 days old (>90)"
+          "error": "latest 2026-03-01 is 253 days old (>90)"
         },
         {
           "name": "World Bank",
-          "current": 498.55,
+          "current": 501.59,
           "url": "https://www.worldbank.org/en/research/commodity-markets",
-          "fetched_at": "2026-11-02T05:12:35Z",
+          "fetched_at": "2026-11-09T05:29:23Z",
           "status": "ok",
           "history": [
             {
@@ -4731,13 +4731,17 @@
             },
             {
               "date": "2026-10-26",
-              "value": 498.55
+              "value": 521.62
+            },
+            {
+              "date": "2026-11-02",
+              "value": 501.59
             }
           ],
           "comparisons": {
-            "wow_pct": -2.76,
-            "mom_pct": -7.71,
-            "yoy_pct": 15.98
+            "wow_pct": -3.84,
+            "mom_pct": -0.44,
+            "yoy_pct": 13.95
           }
         }
       ]
@@ -4748,8 +4752,8 @@
       "unit": "円/kg",
       "display_mode": "single",
       "value_range": {
-        "min": 2282.7,
-        "max": 2282.7
+        "min": 2174.74,
+        "max": 2174.74
       },
       "sources_count": 1,
       "consistency_flag": "single",
@@ -4759,7 +4763,7 @@
           "name": "JAPIA",
           "current": 2089.5,
           "url": "https://www.japia.or.jp/?topics=press-release",
-          "fetched_at": "2026-11-02T05:12:35Z",
+          "fetched_at": "2026-11-09T05:29:23Z",
           "status": "stale",
           "history": [
             {
@@ -5928,13 +5932,13 @@
             "mom_pct": -1.9,
             "yoy_pct": 39.64
           },
-          "error": "latest 2026-03-01 is 246 days old (>90)"
+          "error": "latest 2026-03-01 is 253 days old (>90)"
         },
         {
           "name": "World Bank",
-          "current": 2282.7,
+          "current": 2174.74,
           "url": "https://www.worldbank.org/en/research/commodity-markets",
-          "fetched_at": "2026-11-02T05:12:35Z",
+          "fetched_at": "2026-11-09T05:29:23Z",
           "status": "ok",
           "history": [
             {
@@ -7371,13 +7375,17 @@
             },
             {
               "date": "2026-10-26",
-              "value": 2282.7
+              "value": 2243.5
+            },
+            {
+              "date": "2026-11-02",
+              "value": 2174.74
             }
           ],
           "comparisons": {
-            "wow_pct": 1.93,
-            "mom_pct": -1.67,
-            "yoy_pct": 38.11
+            "wow_pct": -3.06,
+            "mom_pct": -3.73,
+            "yoy_pct": 28.81
           }
         }
       ]
@@ -7388,8 +7396,8 @@
       "unit": "円/kg",
       "display_mode": "single",
       "value_range": {
-        "min": 366.28,
-        "max": 366.28
+        "min": 367.5,
+        "max": 367.5
       },
       "sources_count": 1,
       "consistency_flag": "single",
@@ -7397,9 +7405,9 @@
       "sources": [
         {
           "name": "World Bank",
-          "current": 366.28,
+          "current": 367.5,
           "url": "https://www.worldbank.org/en/research/commodity-markets",
-          "fetched_at": "2026-11-02T05:12:35Z",
+          "fetched_at": "2026-11-09T05:29:23Z",
           "status": "ok",
           "history": [
             {
@@ -8836,13 +8844,17 @@
             },
             {
               "date": "2026-10-26",
-              "value": 366.28
+              "value": 366.82
+            },
+            {
+              "date": "2026-11-02",
+              "value": 367.5
             }
           ],
           "comparisons": {
-            "wow_pct": 0.3,
-            "mom_pct": 0.04,
-            "yoy_pct": -84.23
+            "wow_pct": 0.19,
+            "mom_pct": 0.01,
+            "yoy_pct": -83.96
           }
         }
       ]
